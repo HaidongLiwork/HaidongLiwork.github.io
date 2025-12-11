@@ -1,13 +1,19 @@
 ---
 permalink: /
-title: "Li Haidong（李海东） Personal Page"
+title: "Li Haidong Personal Page  李海东个人主页"
 author_profile: true
 redirect_from: 
   - /about/
   - /about.html
 ---
 
-This is the front page of a website that is powered by the [Academic Pages template](https://github.com/academicpages/academicpages.github.io) and hosted on GitHub pages. [GitHub pages](https://pages.github.com) is a free service in which websites are built and hosted from code and data stored in a GitHub repository, automatically updating when a new commit is made to the repository. This template was forked from the [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/) created by Michael Rose, and then extended to support the kinds of content that academics have: publications, talks, teaching, a portfolio, blog posts, and a dynamically-generated CV. Incidentally, these same features make it a great template for anyone that needs to show off a professional template!
+This is my personal page where you can find selected academic and course materials.
+
+I am currently a faculty member at the Jiangsu Police Institute. I earned my Ph.D. in 2025 from the Academy of Mathematics and Systems Sciences, Chinese Academy of Sciences, under the distinguished supervision of Professor WAN Xin.
+
+My research interests center on the Birch and Swinnerton-Dyer Conjecture and related areas, especially the arithmetic of elliptic curves and Iwasawa theory. I am currently exploring problems in analytic number theory and am also interested in applying number-theoretic insights to other fields.
+
+
 
  You can fork [this template](https://github.com/academicpages/academicpages.github.io) right now, modify the configuration and Markdown files, add your own PDFs and other content, and have your own site for free, with no ads!
 
