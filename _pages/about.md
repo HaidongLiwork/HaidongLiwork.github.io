@@ -9,13 +9,12 @@ redirect_from:
 
 This is my personal page where you can find selected academic and course materials.
 
-I am currently a faculty member at the Jiangsu Police Institute. I earned my Ph.D. in 2025 from the Academy of Mathematics and Systems Sciences, Chinese Academy of Sciences, under the distinguished supervision of Professor WAN Xin.
+I am currently a faculty member at the Jiangsu Police Institute. I earned my Ph.D. in 2025 from the Academy of Mathematics and Systems Sciences, Chinese Academy of Sciences, under the distinguished supervision of Professor WAN Xin（万昕）.
 
-My research interests center on the Birch and Swinnerton-Dyer Conjecture and related areas, especially the arithmetic of elliptic curves and Iwasawa theory. I am currently exploring problems in analytic number theory and am also interested in applying number-theoretic insights to other fields.
+My research interests center on number theory, especially the Birch and Swinnerton-Dyer Conjecture and related areas, the arithmetic of elliptic curves and Iwasawa theory. I am currently exploring problems in analytic number theory and am also interested in applying number-theoretic insights to other fields.
 
 
 
- You can fork [this template](https://github.com/academicpages/academicpages.github.io) right now, modify the configuration and Markdown files, add your own PDFs and other content, and have your own site for free, with no ads!
 
 A data-driven personal website
 ======
