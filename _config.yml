@@ -7,8 +7,8 @@
 # server process.
 
 # Basic Site Settings
-locale                   : "en-US"
-site_theme               : "air" # Currently available options are "default", "air"
+locale                   : "zh_CN"
+site_theme               : "default" # Currently available options are "default", "air"
 title                    : "您好"
 title_separator          : "（李海东个人主页）" 
 name                     : &name "Li Haidong（李海东）"
@@ -26,10 +26,10 @@ author:
   avatar           : "profile.png"
   name             : "Li Haidong"
   pronouns         : # example: ""  
-  bio              : "facaulty"
+  bio              : "A teacter"
   location         : "Nanjing, Jiangsu, China"
   employer         : "Jiangsu Police Insititute"
-  uri              : # URL
+  uri              : "https://haidongliwork.github.io/"
   email            : "lihaidong@jspi.cn" 
 
   # Academic websites
