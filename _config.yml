@@ -25,11 +25,11 @@ author:
   # Biographic information
   avatar           : "lihaidong.jpg"
   name             : "Li Haidong"
-  pronouns         : # example: ""  
+  pronouns         : # example:  
   bio              : "A teacter"
   location         : "Nanjing, Jiangsu, China"
   employer         : "Jiangsu Police Insititute"
-  uri              : "https://haidongliwork.github.io/"
+  uri              : 
   email            : "lihaidong@jspi.cn" 
 
   # Academic websites
@@ -57,7 +57,7 @@ author:
 
   # Social media
   artstation       : # Username
-  bluesky          : "bsky.app" # Replace this with you Bluesky username
+  bluesky          :  # Replace this with you Bluesky username
   facebook         : # Username
   flickr           : # Username
   foursquare       : # Username
@@ -90,6 +90,8 @@ publication_category:
     title: 'Journal Articles'    
   conferences:
     title: 'Conference Papers'
+  Preprints:
+    title: 'Preprints'
 
 # Site Settings
 teaser                   :  # filename of teaser fallback teaser image placed in /images/ for social media previews
