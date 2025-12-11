@@ -9,7 +9,7 @@
 # Basic Site Settings
 locale                   : "en-US"
 site_theme               : "air" # Currently available options are "default", "air"
-title                    : "Li Haidong Personal Page"
+title                    : "您好"
 title_separator          : "（李海东个人主页）" 
 name                     : &name "Li Haidong（李海东）"
 description              : &description "Li Haidong Personal Page"   # Update this with a general description of your site, this is the default if not overridden by a page
