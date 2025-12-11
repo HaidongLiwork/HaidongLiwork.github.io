@@ -14,7 +14,7 @@ redirect_from:
 
 This is my personal page where you can find selected academic and course materials.
 
-I am currently a faculty member at the Jiangsu Police Institute. I earned my Ph.D. in 2025 from the Academy of Mathematics and Systems Sciences, Chinese Academy of Sciences, under the distinguished supervision of Professor WAN Xin（万昕）. My thesis discusses The Birch and Swinnerton-Dyer Conjectuer over Totally Real Fields.
+I am currently a faculty member at the Jiangsu Police Institute. I earned my Ph.D. in 2025 from the Academy of Mathematics and Systems Sciences, Chinese Academy of Sciences, under the distinguished supervision of Professor WAN Xin（万昕）. My doctoral thesis discusses The Birch and Swinnerton-Dyer Formula over Totally Real Fields.
 
 My research interests center on number theory, especially the Birch and Swinnerton-Dyer Conjecture and related areas, the arithmetic of elliptic curves and Iwasawa theory. I am currently exploring problems in analytic number theory and am also interested in applying number-theoretic insights to other fields.
 
