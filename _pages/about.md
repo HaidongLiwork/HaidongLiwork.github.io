@@ -13,6 +13,8 @@ redirect_from:
 
   我的研究兴趣是数论。特别地，我关心Birch and Swinnerton-Dyer猜想及其相关领域、椭圆曲线的算术和岩泽理论。在尊敬的万昕研究员的指导下，我的博士论文研究了**全实域上的Birch and Swinnerton-Dyer公式**。最近，我对解析数论也有一定兴趣。此外，我希望自己能将数论知识应用到其他领域。
 
+  您可通过lihaidong@jspi.cn联系我。
+
 This is my personal page where you can find selected academic and course materials.
 
 I am currently a faculty member at the Jiangsu Police Institute. I earned my Ph.D. in 2025 from the Academy of Mathematics and Systems Sciences, Chinese Academy of Sciences, under the distinguished supervision of Professor WAN Xin（万昕）. My doctoral thesis discusses The Birch and Swinnerton-Dyer Formula over Totally Real Fields.
@@ -20,3 +22,5 @@ I am currently a faculty member at the Jiangsu Police Institute. I earned my Ph.
 My research interests center on number theory, especially the Birch and Swinnerton-Dyer Conjecture and related areas, the arithmetic of elliptic curves and Iwasawa theory. I am currently exploring problems in analytic number theory and am also interested in applying number-theoretic insights to other fields.
 
 In my current role, I am responsible for delivering basic mathematics instruction to undergraduate students. A selection of the associated open educational resources can be found under **Courses**.
+
+   You can contact me by lihaidong@jspi.cn.
