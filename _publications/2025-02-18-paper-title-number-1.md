@@ -6,7 +6,7 @@ permalink: /publication/2025-02-18-paper-title-number-1
 excerpt: ''
 date: 2025-02-18
 venue: 'arXiv'
-paperurl: '[https://academicpages.github.io/files/paper1.pdf](https://arxiv.org/pdf/2502.12648)'
+paperurl: 'https://arxiv.org/pdf/2502.12648'
 ---
 
 Let $K/\mathbb{Q}$ be an imaginary quadratic extension, and let $p$ be an odd prime. In this paper, we investigate the growth of Mordell-Weil ranks of CM abelian varieties associated with Hecke characters over $K$ of infinite type $(1, 0)$ along the $\mathbb{Z}_p$-anticyclotomic tower of $K$. Our results cover all decomposition types of $p$ in $K$.
