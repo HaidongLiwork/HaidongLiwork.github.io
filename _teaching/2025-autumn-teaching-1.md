@@ -3,9 +3,9 @@ title: "2025秋季学期：行政能力测验（部分）"
 collection: teaching
 type: "本科生课程"
 permalink: /teaching/2025-autumn-teaching-1
-venue: "江苏警官学院"
+venue: "教学楼"
 date: 2025-11
-location: "江苏南京"
+location: "浦口校区"
 ---
 
 ## 课程目的
