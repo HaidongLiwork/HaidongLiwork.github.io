@@ -4,6 +4,7 @@ collection: publications
 category: preprints
 permalink: /publication/2025-02-18-paper-title-number-1
 excerpt: ''
+type: Put
 date: 2025-02-18
 venue: 'arXiv'
 paperurl: 'https://arxiv.org/pdf/2502.12648'
