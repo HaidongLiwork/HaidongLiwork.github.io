@@ -1,7 +1,7 @@
 ---
 title: "On the Mordell-Weil rank of certain CM abelian varieties over anticyclotomic towers"
 collection: publications
-category: arxiv
+category: preprint
 permalink: /publication/2025-02-18-paper-title-number-1
 excerpt: ''
 date: 2025-02-18
