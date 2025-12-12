@@ -21,6 +21,6 @@ I am currently a faculty member at the Jiangsu Police Institute. I earned my Ph.
 
 My research interests center on number theory, especially the Birch and Swinnerton-Dyer Conjecture and related areas, the arithmetic of elliptic curves and Iwasawa theory. I am currently exploring problems in analytic number theory and am also interested in applying number-theoretic insights to other fields.
 
-In my current role, I am responsible for delivering basic mathematics instruction to undergraduate students. A selection of the associated open educational resources can be found under **Courses**.
+In my current role, I am responsible for delivering basic mathematics instruction to undergraduate students. A selection of the associated open educational resources can be found under **Teaching**.
 
    You can contact me by lihaidong@jspi.cn.
