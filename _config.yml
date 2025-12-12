@@ -23,7 +23,7 @@ repository               : "academicpages/academicpages.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "lihaidong.jpg"
+  avatar           : "lihaidongdoc.jpg"
   name             : "Li Haidong"
   pronouns         : # example:  
   bio              : "A teacter"
