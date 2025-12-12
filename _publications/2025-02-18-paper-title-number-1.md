@@ -5,7 +5,7 @@ category: preprints
 permalink: /publication/2025-02-18-paper-title-number-1
 excerpt: ''
 date: 2025-02-18
-venue: 'Preprints'
+venue: 'arXiv'
 paperurl: '[https://academicpages.github.io/files/paper1.pdf](https://arxiv.org/pdf/2502.12648)'
 ---
 
