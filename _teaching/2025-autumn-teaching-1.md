@@ -4,7 +4,7 @@ collection: teaching
 type: "本科生课程"
 permalink: /teaching/2025-autumn-teaching-1
 venue: "教学楼"
-date: 2025-11
+date: 2025-11-02
 location: "浦口校区"
 ---
 
