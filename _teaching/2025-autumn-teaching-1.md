@@ -1,4 +1,4 @@
----
+2---
 title: "2025秋季学期：行政能力测验（部分）"
 collection: teaching
 type: "本科生课程"
