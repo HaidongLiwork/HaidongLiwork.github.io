@@ -1,6 +1,7 @@
 ---
 title: "2025秋季学期：行政能力测验（部分）"
 collection: teaching
+category: current
 type: "本科生课程"
 permalink: /teaching/2025-autumn-teaching-1
 venue: "教学楼"
