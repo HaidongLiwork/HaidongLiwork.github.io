@@ -24,13 +24,13 @@ repository               : "academicpages/academicpages.github.io"
 author:
   # Biographic information
   avatar           : "lihaidong4.jpeg"
-  name             : "Li Haidong"
+  name             : "Li Haidong 李海东"
   pronouns         : # example:  
-  bio              : "A teacher"
+  bio              : 
   location         : "Nanjing, Jiangsu, China"
   employer         : "Jiangsu Police Insititute"
   uri              : 
-  email            : "lihaidong@jspi.cn" 
+  email            : 
 
   # Academic websites
   academia         : # URL
