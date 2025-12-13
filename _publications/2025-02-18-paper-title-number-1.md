@@ -11,7 +11,7 @@ paperurl: 'https://arxiv.org/pdf/2502.12648'
 author: 'Li Haidong, Xu Ruichen'
 ---
 
-This is joint work with Xu Ruichen.
+This is a joint work with Xu Ruichen（徐睿晨）.
 
 # Abstract
 
