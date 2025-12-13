@@ -12,7 +12,7 @@ author_profile: false
 {% if site.teaching_category %}
   {% for category in site.teaching_category  %}
     {% assign title_shown = false %}
-    {% for post in site.teachings reversed %}
+    {% for post in site.teaching reversed %}
       {% if post.category != category[0] %}
         {% continue %}
       {% endif %}
@@ -24,7 +24,7 @@ author_profile: false
     {% endfor %}
   {% endfor %}
 {% else %}
-  {% for post in site.teachings reversed %}
+  {% for post in site.teaching reversed %}
     {% include archive-single.html %}
   {% endfor %}
 {% endif %}
