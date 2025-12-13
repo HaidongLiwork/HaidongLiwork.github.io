@@ -93,6 +93,13 @@ publication_category:
   preprints:
     title: 'Preprints'
 
+# Teaching Category - The following the list of teaching categories and their headings
+teaching_category:
+  current:
+    title: '正在进行中'
+  history:
+    title: '已结课'
+
 # Site Settings
 teaser                   :  # filename of teaser fallback teaser image placed in /images/ for social media previews
 breadcrumbs              : false # true, false (default)
