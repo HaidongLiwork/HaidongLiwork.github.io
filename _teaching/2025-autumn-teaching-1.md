@@ -1,7 +1,7 @@
 ---
 title: "2025秋季学期：行政职业能力测验（部分）"
 collection: teaching
-category: current
+category: history
 type: "本科生课程"
 permalink: /teaching/2025-autumn-teaching-1
 venue: "浦口校区教学楼"
