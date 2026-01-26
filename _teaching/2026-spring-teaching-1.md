@@ -5,7 +5,7 @@ category: current
 type: "本科生课程"
 permalink: /teaching/2026-spring-teaching-1
 venue: "浦口校区教学楼"
-date: 2026-03
+date: 2026-03-02
 location: "浦口校区"
 ---
 
