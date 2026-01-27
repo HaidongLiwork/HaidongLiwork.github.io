@@ -1,5 +1,5 @@
 ---
-title: "2026秋季学期：行政职业能力训练（部分）"
+title: "2026春季学期：行政职业能力训练（部分）"
 collection: teaching
 category: current
 type: "本科生课程"
