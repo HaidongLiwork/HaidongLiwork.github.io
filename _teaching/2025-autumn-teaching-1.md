@@ -1,5 +1,5 @@
 ---
-title: "2025秋季学期：行政职业能力测验（部分）"
+title: "2025秋季学期：行政职业能力训练（部分）"
 collection: teaching
 category: history
 type: "本科生课程"
