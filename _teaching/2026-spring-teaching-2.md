@@ -1,5 +1,5 @@
 ---
-title: "2026秋季学期：概率论与数理统计"
+title: "2026春季学期：概率论与数理统计"
 collection: teaching
 category: current
 type: "本科生课程"
