@@ -1,4 +1,4 @@
-# Welcome to Jekyll!
+- _posts # Welcome to Jekyll!
 #
 # This config file is meant for settings that affect your entire site, values
 # which you are expected to set up once and rarely need to edit after that.
@@ -175,6 +175,7 @@ include:
   - _pages
   - files
 exclude:
+  - sitemap.xml
   - _posts 
   - "*.sublime-project"
   - "*.sublime-workspace"
@@ -320,7 +321,7 @@ plugins:
   - jekyll-feed
   - jekyll-gist
   - jekyll-paginate
-  - jekyll-sitemap
+  # - jekyll-sitemap
   - jekyll-redirect-from
   - jemoji
 
@@ -329,7 +330,7 @@ whitelist:
   - jekyll-feed
   - jekyll-gist
   - jekyll-paginate
-  - jekyll-sitemap
+  # - jekyll-sitemap
   - jekyll-redirect-from
   - jemoji
 
