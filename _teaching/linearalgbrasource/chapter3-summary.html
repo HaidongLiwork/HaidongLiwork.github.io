@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第三章 总结 · 矩阵及其运算</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <style>
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #fafff5; color: #1a3a1a; line-height: 1.9; }
+        h1 { text-align: center; color: #2d6a2d; border-bottom: 3px solid #4caf50; padding-bottom: 12px; }
+        .box { background: white; padding: 25px 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-left: 6px solid #4caf50; }
+        .key { background: #e8f5e9; padding: 2px 8px; border-radius: 4px; font-weight: bold; color: #1b5e20; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+        ul, ol { padding-left: 22px; }
+        li { margin: 8px 0; }
+        .section-title { font-weight: bold; color: #2d6a2d; font-size: 1.05em; margin-top: 12px; display: block; }
+    </style>
+</head>
+<body>
+    <h1>📝 第三章 · 本章总结</h1>
+    <div class="box">
+        <span class="section-title">一、矩阵的定义与来源</span>
+        <ul>
+            <li><strong>定义</strong>：\(m\times n\) 矩阵 \(A=(a_{ij})\) 是由 \(mn\) 个数排成的数表。</li>
+            <li><strong>两大来源</strong>：线性方程组（系数矩阵/增广矩阵）和线性变换（从 \(\mathbb{R}^n\) 到 \(\mathbb{R}^m\) 的映射）。</li>
+            <li><strong>线性变换的三个视角</strong>：定义（换元）、几何（伸缩/旋转/投影）、抽象（向量空间映射）。</li>
+        </ul>
+
+        <span class="section-title">二、五种运算</span>
+        <ul>
+            <li><strong>加法</strong>：同型矩阵对应元素相加，满足交换律与结合律。</li>
+            <li><strong>数乘</strong>：每个元素乘以 \(\lambda\)，满足分配律。</li>
+            <li><strong>乘法</strong>：\( (AB)_{ij}=\sum_\ell a_{i\ell}b_{\ell j} \)，<span class="key">不满足交换律</span>，但满足结合律与分配律。</li>
+            <li><strong>转置</strong>：行列互换，\((AB)^T=B^TA^T\)。</li>
+            <li><strong>方阵行列式</strong>：\(|A^T|=|A|\)，\(|\lambda A|=\lambda^n|A|\)，\(|AB|=|A||B|\)。</li>
+        </ul>
+
+        <span class="section-title">三、逆矩阵</span>
+        <ul>
+            <li><strong>可逆条件</strong>：\(\det(A)\neq 0\)。</li>
+            <li><strong>计算公式</strong>：\(A^{-1}=\frac{1}{\det(A)}A^\ast\)，其中 \(A^\ast\) 为伴随矩阵。</li>
+            <li><strong>应用</strong>：解矩阵方程 \(AX=B\)，求方阵幂次（结合对角化）。</li>
+        </ul>
+
+        <span class="section-title">四、克拉默法则与分块矩阵</span>
+        <ul>
+            <li><strong>克拉默法则</strong>：当 \(|A|\neq 0\) 时，\(x_j=\frac{|A_j|}{|A|}\)。</li>
+            <li><strong>分块矩阵</strong>：化整为零，分块后的矩阵同样有加法、数乘、乘法、转置运算法则。</li>
+        </ul>
+
+        <p style="margin-top:12px;">💡 本章核心：矩阵不仅是数表，更是 <span class="key">线性变换的代数表达</span>。几何直观是理解抽象运算的钥匙。</p>
+    </div>
+    <div class="footer">📚 线性代数 · 第三章 课后复习总结</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第三章 导览 · 矩阵及其运算</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <style>
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #f0f7ff; color: #1a2a3a; line-height: 1.9; }
+        h1 { text-align: center; color: #003d66; border-bottom: 3px solid #0077be; padding-bottom: 12px; }
+        .box { background: white; padding: 25px 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-left: 6px solid #0077be; }
+        .highlight { color: #0077be; font-weight: bold; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+        ul, ol { padding-left: 22px; }
+        li { margin: 8px 0; }
+        .path { background: #eaf2f8; padding: 12px 18px; border-radius: 8px; text-align: center; font-size: 1.05em; margin: 16px 0; }
+        .path span { font-weight: bold; color: #003d66; }
+    </style>
+</head>
+<body>
+    <h1>🧭 第三章 · 本章导览</h1>
+    <div class="box">
+        <p>本章正式进入本课程最核心的对象——<span class="highlight">矩阵</span>。我们按三个角度展开：</p>
+        <div class="path">
+            <span>从哪里来（产生）</span> → <span>是什么（本身）</span> → <span>到哪里去（理论）</span>
+        </div>
+        <ol>
+            <li><strong>矩阵的产生</strong>：矩阵有多种来源——线性方程组、线性变换、信息存储（如Excel）、警务转账记录、新媒体矩阵等。其中 <span class="highlight">线性方程组</span> 和 <span class="highlight">线性变换</span> 是推动矩阵理论发展的两大引擎。</li>
+            <li><strong>矩阵本身</strong>：矩阵只是一个 <span class="highlight">二维数表</span> \(A=(a_{ij})_{m\times n}\)。同型矩阵相等要求对应元素相等。</li>
+            <li><strong>矩阵的代数理论</strong>：
+                <ul>
+                    <li><strong>线性运算</strong>：加法与数乘，满足交换律、结合律、分配律。</li>
+                    <li><strong>乘法</strong>：由线性变换的复合自然导出，\(c_{ij}=\sum_\ell a_{i\ell}b_{\ell j}\)。<span class="highlight">不满足交换律</span>。</li>
+                    <li><strong>转置</strong>：行列互换，满足穿脱原则 \((AB)^T=B^TA^T\)。</li>
+                    <li><strong>方阵的行列式</strong>：乘性 \(|AB|=|A||B|\)。</li>
+                    <li><strong>逆矩阵</strong>：\(A^{-1}\) 存在 \(\iff \det(A)\neq 0\)，由伴随矩阵给出。</li>
+                    <li><strong>克拉默法则</strong>：用行列式求解 \(n\) 个 \(n\) 元方程组的特殊方法。</li>
+                    <li><strong>分块矩阵</strong>：化整为零，把大矩阵分成小块矩阵处理。</li>
+                </ul>
+            </li>
+        </ol>
+        <p style="margin-top:16px;">💡 本章的特别之处在于：<span class="highlight">线性变换的几何视角</span>（伸缩、旋转、投影）能让抽象的矩阵运算变得可知可感。</p>
+    </div>
+    <div class="footer">📚 线性代数 · 第三章 课前预习导览</div>
+</body>
+</html>
