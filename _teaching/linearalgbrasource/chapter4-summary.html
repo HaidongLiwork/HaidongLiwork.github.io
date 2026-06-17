@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第四章 总结 · 向量组的线性相关性</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <style>
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fafff5;
+            color: #1a3a1a;
+            line-height: 1.9;
+        }
+        h1 {
+            text-align: center;
+            color: #2d6a2d;
+            border-bottom: 3px solid #4caf50;
+            padding-bottom: 12px;
+        }
+        .box {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 6px solid #4caf50;
+        }
+        .key { background: #e8f5e9; padding: 2px 8px; border-radius: 4px; font-weight: bold; color: #1b5e20; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+        ul, ol { padding-left: 22px; }
+        li { margin: 8px 0; }
+        .section-title { font-weight: bold; color: #2d6a2d; font-size: 1.05em; margin-top: 12px; display: block; }
+        .formula-box {
+            background: #f5f5f5; padding: 10px 16px; border-radius: 6px;
+            text-align: center; margin: 8px 0; overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>📝 第四章 · 本章总结</h1>
+    <div class="box">
+
+        <span class="section-title">一、向量及其基本概念</span>
+        <ul>
+            <li><strong>\(n\) 维向量</strong>：\(n\) 个有次序的数 \(a_1,a_2,\dots,a_n\)，可写成行向量或列向量。本讲义默认采用列向量。</li>
+            <li><strong>向量空间</strong>：\(\mathbb{R}^n = \{ (x_1,\dots,x_n)^T \mid x_i \in \mathbb{R} \}\)。</li>
+            <li><strong>向量组</strong>：若干个同维数向量组成的集合。有限向量组与矩阵一一对应。</li>
+        </ul>
+
+        <span class="section-title">二、线性组合与线性表示</span>
+        <ul>
+            <li><strong>线性组合</strong>：\( k_1\boldsymbol{a}_1 + k_2\boldsymbol{a}_2 + \cdots + k_m\boldsymbol{a}_m \)。</li>
+            <li><strong>线性表示</strong>：\(\boldsymbol{b} = \lambda_1\boldsymbol{a}_1 + \cdots + \lambda_m\boldsymbol{a}_m\)。</li>
+            <li><strong>判别定理</strong>：\(\boldsymbol{b}\) 能由向量组 \(A\) 表示 \(\iff R(A) = R(A,\boldsymbol{b})\)。</li>
+            <li><strong>向量组等价</strong>：两个向量组能相互线性表示 \(\iff R(A)=R(B)=R(A,B)\)。</li>
+        </ul>
+
+        <span class="section-title">三、线性相关与线性无关</span>
+        <ul>
+            <li><strong>定义</strong>：存在不全为零的 \(k_1,\dots,k_m\) 使 \(\sum k_i\boldsymbol{a}_i = \boldsymbol{0}\)，则线性相关；否则线性无关。</li>
+            <li><strong>矩阵判别</strong>：\(A=(\boldsymbol{a}_1,\dots,\boldsymbol{a}_m)\)，则
+                <ul>
+                    <li>线性相关 \(\iff R(A) < m\)；</li>
+                    <li>线性无关 \(\iff R(A) = m\)。</li>
+                </ul>
+            </li>
+            <li><strong>几何意义</strong>：两个向量相关 ⇔ 共线；三个向量相关 ⇔ 共面。</li>
+        </ul>
+
+        <span class="section-title">四、重要定理</span>
+        <ul>
+            <li>若一组向量线性相关，则添加任意向量后仍线性相关（“相关则加相关”）。</li>
+            <li>\(m\) 个 \(n\) 维向量，当 \(m > n\) 时一定线性相关（“高个子”必相关）。</li>
+            <li>若 \(\boldsymbol{a}_1,\dots,\boldsymbol{a}_m\) 线性无关，而添加 \(\boldsymbol{b}\) 后线性相关，则 \(\boldsymbol{b}\) 可由它们 <strong>唯一</strong> 线性表示。</li>
+        </ul>
+
+        <span class="section-title">五、三种语言的统一</span>
+        <div class="formula-box">
+            <span style="font-weight:bold;">矩阵</span> &nbsp;⟷&nbsp; <span style="font-weight:bold;">向量组</span> &nbsp;⟷&nbsp; <span style="font-weight:bold;">线性方程组</span>
+        </div>
+        <p style="margin-top:8px;">本章的核心思想是建立这三种语言之间的 <span class="key">等价翻译</span>。同一个线性代数问题，可以从矩阵、向量组、方程组三个角度切入，选择最便利的工具解决。</p>
+
+    </div>
+    <div class="footer">📚 线性代数 · 第四章 课后复习总结</div>
+</body>
+</html>

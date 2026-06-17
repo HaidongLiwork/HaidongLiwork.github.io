@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二章 总结 · 行列式</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <style>
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fafff5;
+            color: #1a3a1a;
+            line-height: 1.9;
+        }
+        h1 {
+            text-align: center;
+            color: #2d6a2d;
+            border-bottom: 3px solid #4caf50;
+            padding-bottom: 12px;
+        }
+        .box {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 6px solid #4caf50;
+        }
+        .key { background: #e8f5e9; padding: 2px 8px; border-radius: 4px; font-weight: bold; color: #1b5e20; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+        ul, ol { padding-left: 22px; }
+        li { margin: 8px 0; }
+    </style>
+</head>
+<body>
+    <h1>📝 第二章 · 本章总结</h1>
+    <div class="box">
+        <ol>
+            <li><span class="key">行列式的定义</span>
+                <ul>
+                    <li><strong>2阶</strong>：\( \begin{vmatrix} a & b \\ c & d \end{vmatrix} = ad - bc \)，几何意义为平行四边形的面积（带符号）。</li>
+                    <li><strong>3阶</strong>：对角线法（6项），几何意义为平行六面体的体积（带符号）。</li>
+                    <li><strong>n阶</strong>：\( D = \sum_{p_1 p_2 \cdots p_n \in S_n} (-1)^{t(p_1 p_2 \cdots p_n)} a_{1p_1} a_{2p_2} \cdots a_{np_n} \)，其中 \( t \) 为逆序数。</li>
+                </ul>
+            </li>
+            <li><span class="key">核心性质</span>
+                <ul>
+                    <li><strong>转置不变</strong>：\( D^T = D \)。</li>
+                    <li><strong>对换变号</strong>：交换两行（列），行列式变号。</li>
+                    <li><strong>线性性（重中之重）</strong>：某一行（列）的数乘与加法可分别提取和拆分。</li>
+                    <li><strong>倍加不变</strong>：某行（列）乘以数 \( k \) 加到另一行（列），行列式不变。</li>
+                </ul>
+            </li>
+            <li><span class="key">计算方法</span>
+                <ul>
+                    <li><strong>定义法</strong>：万能但繁琐，适合理论推导。</li>
+                    <li><strong>化上三角法</strong>：利用性质将行列式化为上三角，主对角线乘积即为结果。</li>
+                    <li><strong>按行（列）展开</strong>：利用余子式 \( M_{ij} \) 和代数余子式 \( A_{ij}=(-1)^{i+j}M_{ij} \)，将 n 阶降为 n-1 阶。</li>
+                </ul>
+            </li>
+            <li><span class="key">经典结论</span>
+                <ul>
+                    <li><strong>范德蒙德行列式</strong>：\[ V_n = \prod_{1 \le i < j \le n} (x_j - x_i) \]。</li>
+                    <li><strong>正交关系</strong>：\[ \sum_{\ell} a_{t\ell} A_{k\ell} = D \cdot \delta_{tk} \]。</li>
+                </ul>
+            </li>
+        </ol>
+        <p style="margin-top:12px;">💡 本章核心思想：<span class="key">从特殊到一般、从几何到代数、从定义到性质、从理论到计算</span>。掌握好“线性性”这一关键，几乎所有计算问题都可迎刃而解。</p>
+    </div>
+    <div class="footer">📚 线性代数 · 第二章 课后复习总结</div>
+</body>
+</html>

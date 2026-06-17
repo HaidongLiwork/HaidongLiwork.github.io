@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第四章 导览 · 向量组的线性相关性</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <style>
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f0f7ff;
+            color: #1a2a3a;
+            line-height: 1.9;
+        }
+        h1 {
+            text-align: center;
+            color: #003d66;
+            border-bottom: 3px solid #0077be;
+            padding-bottom: 12px;
+        }
+        .box {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 6px solid #0077be;
+        }
+        .highlight { color: #0077be; font-weight: bold; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+        ul, ol { padding-left: 22px; }
+        li { margin: 8px 0; }
+        .path {
+            background: #eaf2f8; padding: 12px 18px; border-radius: 8px;
+            text-align: center; font-size: 1.05em; margin: 16px 0;
+        }
+        .path span { font-weight: bold; color: #003d66; }
+        .tri-lang {
+            display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+            margin: 12px 0; font-weight: bold;
+        }
+        .tri-lang span {
+            background: #eaf2f8; padding: 6px 18px; border-radius: 20px;
+            color: #003d66;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧭 第四章 · 本章导览</h1>
+    <div class="box">
+        <p>本章是线性代数课程的 <span class="highlight">“抽象之峰”</span>，从具体的矩阵和方程组运算，迈向对向量组结构的抽象研究。学习路径如下：</p>
+
+        <div class="path">
+            <span>向量（代数定义）</span> → <span>线性组合与线性表示</span> → <span>线性相关与线性无关</span>
+        </div>
+
+        <div class="tri-lang">
+            <span>📊 矩阵</span>
+            <span>🔗 向量组</span>
+            <span>📐 线性方程组</span>
+        </div>
+
+        <ol>
+            <li><strong>从“数”到“向量”</strong>：将向量从几何直观中解放出来，定义为 \(n\) 个有次序的数，并引入行向量与列向量的矩阵表示。向量空间 \(\mathbb{R}^n\) 是全体 \(n\) 维向量的集合。</li>
+            <li><strong>线性组合与线性表示</strong>：学习如何用一个向量组“拼出”另一个向量，并建立其与矩阵方程 \(Ax=b\) 有解之间的等价关系。进一步将这一概念推广到向量组之间的相互表示与等价。</li>
+            <li><strong>线性相关与线性无关</strong>：这是本章的 <span class="highlight">核心概念</span>——研究齐次方程 \(k_1\boldsymbol{a}_1+\cdots+k_m\boldsymbol{a}_m=\boldsymbol{0}\) 是否存在非零解。通过矩阵的秩 \(R(A)\) 与向量个数 \(m\) 的关系，给出简洁的判别准则。</li>
+        </ol>
+
+        <p style="margin-top:16px;">💡 本章的重要启示在于：<span class="highlight">矩阵、向量组、线性方程组三种语言本质上等价</span>，可相互翻译。学会在这三种语言之间自由切换，是理解线性代数的关键能力。</p>
+    </div>
+    <div class="footer">📚 线性代数 · 第四章 课前预习导览</div>
+</body>
+</html>

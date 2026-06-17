@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第三章 导览 · 矩阵的初等变换与线性方程组</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <style>
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f0f7ff;
+            color: #1a2a3a;
+            line-height: 1.9;
+        }
+        h1 {
+            text-align: center;
+            color: #003d66;
+            border-bottom: 3px solid #0077be;
+            padding-bottom: 12px;
+        }
+        .box {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 6px solid #0077be;
+        }
+        .highlight { color: #0077be; font-weight: bold; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+        ul, ol { padding-left: 22px; }
+        li { margin: 8px 0; }
+        .path {
+            background: #eaf2f8; padding: 12px 18px; border-radius: 8px;
+            text-align: center; font-size: 1.05em; margin: 16px 0;
+        }
+        .path span { font-weight: bold; color: #003d66; }
+    </style>
+</head>
+<body>
+    <h1>🧭 第三章 · 本章导览</h1>
+    <div class="box">
+        <p>本章是线性代数课程的 <span class="highlight">“理论高峰”</span>，概念密集、推理较多，但体系极为清晰。学习路径呈现漂亮的 <span class="highlight">“U型”</span> 结构：</p>
+        <div class="path">
+            <span>具体（解方程组）</span> → <span>抽象（矩阵的秩）</span> → <span>具体（判断解的情况）</span>
+        </div>
+        <ol>
+            <li><strong>第一节：从线性方程组到初等变换</strong><br>从解四元方程组引入 <span class="highlight">行初等变换</span>（交换、倍乘、倍加），定义 <span class="highlight">行阶梯形</span>、<span class="highlight">行最简形</span>。引入列变换得到 <span class="highlight">标准形</span> \[ F_r = \begin{pmatrix} E_r & 0 \\ 0 & 0 \end{pmatrix} \]，给出矩阵 <span class="highlight">秩</span> 的第一个定义。</li>
+            <li><strong>第二节：矩阵的秩</strong><br>给出秩的第二个定义——<span class="highlight">最高阶非零子式的阶数</span>，并证明等价。系统学习秩的性质，如初等变换不变性、分块关系、乘积不等式 \(R(AB) \le \min\{R(A),R(B)\}\) 等。</li>
+            <li><strong>第三节：线性方程组的解</strong><br>将抽象的秩理论 <span class="highlight">“落地”</span>，利用秩给出 \(Ax=b\) <span class="highlight">无解、有唯一解、无穷多解</span> 的完整判别定理：\(R(A)\) 与 \(R(A,b)\) 的比较。</li>
+        </ol>
+        <p style="margin-top:16px;">💡 正如登楼：先爬楼梯（具体操作），再到二楼（抽象理论），视野开阔后再回到地面（应用），此时你对解方程组的理解已 <span class="highlight">“更上一层楼”</span>。</p>
+    </div>
+    <div class="footer">📚 线性代数 · 第三章 课前预习导览</div>
+</body>
+</html>
