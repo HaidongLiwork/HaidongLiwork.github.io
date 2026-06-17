@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>向量张成平行四边形 & 面积公式验证 · 可视化互动</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            user-select: none; /* 防止拖动时选中文本 */
+        }
+        body {
+            background: linear-gradient(145deg, #f5f7fa 0%, #e9ecf2 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 40px -10px rgba(0,20,30,0.3), inset 0 1px 2px rgba(255,255,255,0.6);
+            padding: 2rem 2rem 2.5rem;
+            width: fit-content;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        h2 {
+            margin: 0 0 0.75rem 0;
+            font-weight: 500;
+            color: #1e3b5c;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+        h2 span {
+            background: #2b4f6e;
+            color: white;
+            font-size: 0.9rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-weight: 400;
+        }
+        .canvas-wrapper {
+            background: #ffffff;
+            border-radius: 1.8rem;
+            padding: 0.5rem;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.05), 0 8px 18px rgba(0,40,60,0.15);
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+        canvas {
+            display: block;
+            border-radius: 1.2rem;
+            width: 600px;
+            height: 600px;
+            cursor: grab;
+            touch-action: none;  /* 避免触摸时滚动/缩放 */
+        }
+        canvas:active {
+            cursor: grabbing;
+        }
+        .input-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem 2.5rem;
+            margin-top: 1.8rem;
+            justify-content: center;
+        }
+        .vector-group {
+            background: rgba(255,255,255,0.5);
+            border-radius: 2rem;
+            padding: 1rem 1.8rem 1.3rem;
+            box-shadow: 0 4px 8px rgba(0,20,30,0.1);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .vector-group h3 {
+            margin: 0 0 0.8rem 0;
+            font-weight: 500;
+            font-size: 1.2rem;
+            color: #1a3a4f;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .badge {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 18px;
+            background: #336b87;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .badge.v2 {
+            background: #ac4e6b;
+        }
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 0.5rem 0;
+        }
+        .input-row label {
+            width: 1.8rem;
+            font-weight: 500;
+            color: #2e577a;
+        }
+        .input-row input {
+            width: 90px;
+            padding: 0.5rem 0.8rem;
+            border: 1px solid #cbd6e4;
+            border-radius: 40px;
+            font-size: 1rem;
+            background: white;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-family: 'JetBrains Mono', monospace;
+            transition: 0.15s;
+            outline: none;
+            color: #0b2b3f;
+            font-weight: 500;
+        }
+        .input-row input:focus {
+            border-color: #4f9aa9;
+            box-shadow: 0 0 0 3px rgba(79,154,169,0.2);
+        }
+        .area-panel {
+            background: #d9e4ee70;
+            border-radius: 2rem;
+            padding: 1.2rem 2rem 1.2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 240px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        .area-panel h3 {
+            margin: 0 0 0.5rem 0;
+            font-weight: 500;
+            color: #1f405b;
+        }
+        .formula-line {
+            font-size: 1.1rem;
+            padding: 0.3rem 0;
+            border-bottom: 1px dashed #b1c9dd;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+        }
+        .formula-line:last-child {
+            border-bottom: none;
+        }
+        .formula-code {
+            font-family: 'JetBrains Mono', monospace;
+            background: #2c4a6a15;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            color: #124066;
+        }
+        .value {
+            font-weight: 600;
+            font-size: 1.3rem;
+            color: #003153;
+        }
+        .equal-badge {
+            background: #1f7a5a;
+            color: white;
+            border-radius: 40px;
+            padding: 0.3rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            margin-top: 0.5rem;
+            box-shadow: 0 2px 6px #1f7a5a60;
+        }
+        .equal-badge.not-equal {
+            background: #b13e4b;
+            box-shadow: 0 2px 6px #b13e4b80;
+        }
+        .footer-notes {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            color: #2b4d67;
+        }
+        .reset-btn {
+            background: none;
+            border: 1px solid #547a99;
+            padding: 0.4rem 1.8rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            color: #1e405b;
+            cursor: pointer;
+            transition: 0.15s;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+        }
+        .reset-btn:hover {
+            background: #1e405b20;
+            border-color: #1e405b;
+        }
+        .drag-hint {
+            color: #386282;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>
+        ✦ 向量平行四边形 · 面积验证
+        <span>可拖拽点 / 输入</span>
+    </h2>
+    <div class="canvas-wrapper">
+        <canvas id="vectorCanvas" width="600" height="600"></canvas>
+    </div>
+
+    <div class="input-panel">
+        <!-- 向量 v1 = (a, b) -->
+        <div class="vector-group">
+            <h3><span class="badge" style="background:#3278a4;"></span> 向量 v₁ (a, b)</h3>
+            <div class="input-row">
+                <label>a :</label>
+                <input type="number" id="inputA" value="3.0" step="0.1">
+            </div>
+            <div class="input-row">
+                <label>b :</label>
+                <input type="number" id="inputB" value="1.0" step="0.1">
+            </div>
+        </div>
+        <!-- 向量 v2 = (c, d) -->
+        <div class="vector-group">
+            <h3><span class="badge v2" style="background:#b35e7a;"></span> 向量 v₂ (c, d)</h3>
+            <div class="input-row">
+                <label>c :</label>
+                <input type="number" id="inputC" value="1.0" step="0.1">
+            </div>
+            <div class="input-row">
+                <label>d :</label>
+                <input type="number" id="inputD" value="3.0" step="0.1">
+            </div>
+        </div>
+
+        <!-- 面积显示 & 验证 -->
+        <div class="area-panel">
+            <h3>📐 面积公式</h3>
+            <div class="formula-line">
+                <span class="formula-code">|ad - bc|</span>
+                <span class="value" id="areaDet">0.00</span>
+            </div>
+            <div class="formula-line">
+                <span class="formula-code">|v₁||v₂|·sinθ</span>
+                <span class="value" id="areaLenSin">0.00</span>
+            </div>
+            <div id="equalIndicator" class="equal-badge">✓ 数值相等</div>
+        </div>
+    </div>
+
+    <div class="footer-notes">
+        <span class="drag-hint">⚡ 拖拽蓝色/红色点 或 修改输入框</span>
+        <button class="reset-btn" id="resetBtn">↺ 重置默认</button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- 坐标系设置 -----
+        const canvas = document.getElementById('vectorCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = 600, height = 600;
+        const range = 10.0;               // 坐标轴范围 [-range, range]
+        const scale = 300 / range;         // 300 = width/2, 将世界坐标映射到像素
+
+        // 向量分量: a, b, c, d
+        let a = 3.0, b = 1.0, c = 1.0, d = 3.0;
+
+        // 拖拽状态
+        let draggingIndex = -1;             // 0: v1终点, 1: v2终点, -1: 无
+        let lastMouseX = 0, lastMouseY = 0; // 暂存（用于move）
+
+        // DOM 元素
+        const inputA = document.getElementById('inputA');
+        const inputB = document.getElementById('inputB');
+        const inputC = document.getElementById('inputC');
+        const inputD = document.getElementById('inputD');
+        const areaDetSpan = document.getElementById('areaDet');
+        const areaLenSinSpan = document.getElementById('areaLenSin');
+        const equalIndicator = document.getElementById('equalIndicator');
+
+        // ----- 工具函数：世界坐标 <-> 画布像素 -----
+        function worldToCanvas(x, y) {
+            return {
+                x: width / 2 + x * scale,
+                y: height / 2 - y * scale    // y轴向上为正
+            };
+        }
+
+        function canvasToWorld(px, py) {
+            return {
+                x: (px - width / 2) / scale,
+                y: (height / 2 - py) / scale
+            };
+        }
+
+        // ----- 更新所有输入框的显示值 (不触发input事件) -----
+        function updateInputFields() {
+            inputA.value = a.toFixed(2);
+            inputB.value = b.toFixed(2);
+            inputC.value = c.toFixed(2);
+            inputD.value = d.toFixed(2);
+        }
+
+        // ----- 计算面积 & 更新显示 -----
+        function updateAreaDisplay() {
+            const det = Math.abs(a * d - b * c);
+            const len1 = Math.sqrt(a * a + b * b);
+            const len2 = Math.sqrt(c * c + d * d);
+            // 使用叉积模 / (len1*len2) 得到 sinθ，避免直接算角度
+            let sinTheta = 0;
+            if (len1 * len2 !== 0) {
+                sinTheta = det / (len1 * len2);
+            }
+            const area2 = len1 * len2 * sinTheta;  // 理论上等于 det (浮点误差)
+
+            areaDetSpan.textContent = det.toFixed(6);
+            areaLenSinSpan.textContent = area2.toFixed(6);
+
+            // 验证相等 (考虑浮点误差)
+            const eps = 1e-10;
+            const equal = Math.abs(det - area2) < eps;
+            if (equal) {
+                equalIndicator.textContent = '✓ 数值相等';
+                equalIndicator.className = 'equal-badge';
+            } else {
+                equalIndicator.textContent = '⚠ 不相等 (微小误差)';
+                equalIndicator.className = 'equal-badge not-equal';
+            }
+        }
+
+        // ----- 绘制场景 (网格, 轴, 四边形, 向量, 点) -----
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            // 辅助网格 (间隔1单位)
+            ctx.beginPath();
+            ctx.strokeStyle = '#d9dde5';
+            ctx.lineWidth = 0.8;
+            for (let i = -range; i <= range; i += 1) {
+                if (i === 0) continue; // 轴线单独画
+                const p = worldToCanvas(i, 0);
+                const pX = worldToCanvas(0, i);
+                // 垂直线 x = i
+                ctx.beginPath();
+                ctx.moveTo(p.x, 0);
+                ctx.lineTo(p.x, height);
+                ctx.strokeStyle = '#e2e6ed';
+                ctx.stroke();
+                // 水平线 y = i
+                ctx.beginPath();
+                ctx.moveTo(0, pX.y);
+                ctx.lineTo(width, pX.y);
+                ctx.strokeStyle = '#e2e6ed';
+                ctx.stroke();
+            }
+
+            // 坐标轴 (黑色半透明)
+            ctx.beginPath();
+            ctx.lineWidth = 2.2;
+            ctx.strokeStyle = '#2f4b6e';
+            ctx.setLineDash([]);
+            // X轴
+            const origin = worldToCanvas(0, 0);
+            ctx.beginPath();
+            ctx.moveTo(0, origin.y);
+            ctx.lineTo(width, origin.y);
+            ctx.strokeStyle = '#2b4f70';
+            ctx.stroke();
+            // Y轴
+            ctx.beginPath();
+            ctx.moveTo(origin.x, 0);
+            ctx.lineTo(origin.x, height);
+            ctx.strokeStyle = '#2b4f70';
+            ctx.stroke();
+
+            // 轴标签
+            ctx.font = '12px "Segoe UI", monospace';
+            ctx.fillStyle = '#2f5170';
+            ctx.fillText('x', width-18, origin.y-10);
+            ctx.fillText('y', origin.x+12, 18);
+
+            // 绘制平行四边形填充 (半透明)
+            const p0 = worldToCanvas(0, 0);
+            const p1 = worldToCanvas(a, b);
+            const p2 = worldToCanvas(a + c, b + d);
+            const p3 = worldToCanvas(c, d);
+
+            ctx.beginPath();
+            ctx.moveTo(p0.x, p0.y);
+            ctx.lineTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.lineTo(p3.x, p3.y);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(153, 204, 255, 0.25)';
+            ctx.fill();
+            ctx.strokeStyle = '#4875a3';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 绘制向量箭头 (从原点出发)
+            drawArrow(0, 0, a, b, '#3278a4');
+            drawArrow(0, 0, c, d, '#b35e7a');
+
+            // 绘制向量终点大圆点
+            ctx.beginPath();
+            ctx.arc(p1.x, p1.y, 9, 0, 2 * Math.PI);
+            ctx.fillStyle = '#3278a4';
+            ctx.shadowColor = '#89b6d9';
+            ctx.shadowBlur = 8;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(p3.x, p3.y, 9, 0, 2 * Math.PI);
+            ctx.fillStyle = '#b35e7a';
+            ctx.shadowColor = '#d89aaf';
+            ctx.shadowBlur = 8;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'white';
+            ctx.stroke();
+
+            // 原点标记
+            ctx.beginPath();
+            ctx.arc(origin.x, origin.y, 6, 0, 2*Math.PI);
+            ctx.fillStyle = '#2b4f6e';
+            ctx.shadowBlur = 6;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 13px "Segoe UI"';
+            ctx.fillText('O', origin.x+10, origin.y-10);
+
+            // 显示坐标标签 (v1, v2)
+            ctx.font = '500 13px "JetBrains Mono", monospace';
+            ctx.fillStyle = '#1f3b54';
+            ctx.shadowBlur = 0;
+            ctx.fillText(`v₁ (${a.toFixed(2)}, ${b.toFixed(2)})`, p1.x + 15, p1.y - 15);
+            ctx.fillStyle = '#922e55';
+            ctx.fillText(`v₂ (${c.toFixed(2)}, ${d.toFixed(2)})`, p3.x + 15, p3.y - 15);
+        }
+
+        // 绘制箭头函数 (起点(0,0) 到 (vx,vy))
+        function drawArrow(vx, vy, color) {
+            if (Math.abs(vx) < 0.001 && Math.abs(vy) < 0.001) return;
+            const from = worldToCanvas(0, 0);
+            const to = worldToCanvas(vx, vy);
+            const angle = Math.atan2(to.y - from.y, to.x - from.x);
+            const arrowSize = 16;
+
+            // 画主线
+            ctx.beginPath();
+            ctx.moveTo(from.x, from.y);
+            ctx.lineTo(to.x, to.y);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3.2;
+            ctx.shadowColor = '#a0b8cf';
+            ctx.shadowBlur = 8;
+            ctx.stroke();
+
+            // 箭头三角 (画在终点但稍微缩进一点避免覆盖圆点)
+            const backOff = 14; // 让箭头尾部在圆点之前
+            const tipX = to.x - Math.cos(angle) * 4;  // 微调使箭头清晰
+            const tipY = to.y - Math.sin(angle) * 4;
+            const leftX = tipX - arrowSize * 0.7 * Math.cos(angle - 0.4);
+            const leftY = tipY - arrowSize * 0.7 * Math.sin(angle - 0.4);
+            const rightX = tipX - arrowSize * 0.7 * Math.cos(angle + 0.4);
+            const rightY = tipY - arrowSize * 0.7 * Math.sin(angle + 0.4);
+
+            ctx.beginPath();
+            ctx.moveTo(tipX, tipY);
+            ctx.lineTo(leftX, leftY);
+            ctx.lineTo(rightX, rightY);
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+
+        // ----- 输入框监听 -----
+        function bindInputs() {
+            inputA.addEventListener('input', function(e) {
+                let val = parseFloat(e.target.value);
+                if (!isNaN(val)) a = val;
+                updateInputFields(); // 保证格式化
+                draw();
+                updateAreaDisplay();
+            });
+            inputB.addEventListener('input', function(e) {
+                let val = parseFloat(e.target.value);
+                if (!isNaN(val)) b = val;
+                updateInputFields();
+                draw();
+                updateAreaDisplay();
+            });
+            inputC.addEventListener('input', function(e) {
+                let val = parseFloat(e.target.value);
+                if (!isNaN(val)) c = val;
+                updateInputFields();
+                draw();
+                updateAreaDisplay();
+            });
+            inputD.addEventListener('input', function(e) {
+                let val = parseFloat(e.target.value);
+                if (!isNaN(val)) d = val;
+                updateInputFields();
+                draw();
+                updateAreaDisplay();
+            });
+        }
+
+        // ----- 重置默认值 -----
+        function resetDefaults() {
+            a = 3.0; b = 1.0; c = 1.0; d = 3.0;
+            updateInputFields();
+            draw();
+            updateAreaDisplay();
+        }
+
+        // ----- 拖拽逻辑 -----
+        function startDrag(x, y) {
+            const world = canvasToWorld(x, y);
+            // 计算到两个向量终点 (a,b) 和 (c,d) 的屏幕距离
+            const p1 = worldToCanvas(a, b);
+            const p2 = worldToCanvas(c, d);
+            const dist1 = Math.hypot(x - p1.x, y - p1.y);
+            const dist2 = Math.hypot(x - p2.x, y - p2.y);
+            const threshold = 20; // 像素容差
+
+            if (dist1 < threshold && dist1 <= dist2) {
+                draggingIndex = 0;
+            } else if (dist2 < threshold) {
+                draggingIndex = 1;
+            } else {
+                draggingIndex = -1;
+            }
+        }
+
+        function onDrag(x, y) {
+            if (draggingIndex === -1) return;
+            let world = canvasToWorld(x, y);
+            // 钳位到[-range, range] 避免拖出视野太远
+            world.x = Math.min(range, Math.max(-range, world.x));
+            world.y = Math.min(range, Math.max(-range, world.y));
+
+            if (draggingIndex === 0) {
+                a = world.x;
+                b = world.y;
+            } else if (draggingIndex === 1) {
+                c = world.x;
+                d = world.y;
+            }
+            // 更新输入框显示
+            updateInputFields();
+            draw();
+            updateAreaDisplay();
+        }
+
+        function stopDrag() {
+            draggingIndex = -1;
+        }
+
+        // ----- 事件绑定 canvas-----
+        function bindCanvasEvents() {
+            // 鼠标
+            canvas.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const mouseX = (e.clientX - rect.left) * scaleX;
+                const mouseY = (e.clientY - rect.top) * scaleY;
+                startDrag(mouseX, mouseY);
+                if (draggingIndex !== -1) {
+                    canvas.style.cursor = 'grabbing';
+                }
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (draggingIndex === -1) return;
+                e.preventDefault();
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const mouseX = (e.clientX - rect.left) * scaleX;
+                const mouseY = (e.clientY - rect.top) * scaleY;
+                onDrag(mouseX, mouseY);
+            });
+
+            window.addEventListener('mouseup', () => {
+                stopDrag();
+                canvas.style.cursor = 'grab';
+            });
+
+            // 触摸事件 (移动端)
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const touchX = (touch.clientX - rect.left) * scaleX;
+                const touchY = (touch.clientY - rect.top) * scaleY;
+                startDrag(touchX, touchY);
+            }, { passive: false });
+
+            window.addEventListener('touchmove', (e) => {
+                if (draggingIndex === -1) return;
+                e.preventDefault();
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const touchX = (touch.clientX - rect.left) * scaleX;
+                const touchY = (touch.clientY - rect.top) * scaleY;
+                onDrag(touchX, touchY);
+            }, { passive: false });
+
+            window.addEventListener('touchend', (e) => {
+                stopDrag();
+            });
+        }
+
+        // ----- 初始化 -----
+        function init() {
+            updateInputFields();
+            draw();
+            updateAreaDisplay();
+            bindInputs();
+            bindCanvasEvents();
+
+            document.getElementById('resetBtn').addEventListener('click', resetDefaults);
+        }
+
+        init();
+    })();
+</script>
+</body>
+</html>

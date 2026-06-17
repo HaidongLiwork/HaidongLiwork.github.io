@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>线性变换几何实验室 | 二维矩阵变换可视化</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none; /* 避免拖动时意外选中文本，输入框不影响 */
+        }
+        body {
+            background: linear-gradient(145deg, #f5f7fc 0%, #eef2f6 100%);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* 主容器卡片 */
+        .dashboard {
+            max-width: 1400px;
+            width: 100%;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.05);
+            overflow: hidden;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+        /* 两列布局: 左侧控件 + 右侧画布区 */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 1.8rem;
+        }
+        /* 左侧控制卡 */
+        .control-panel {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.2rem 1.8rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            overflow-y: auto;
+            max-height: calc(100vh - 100px);
+            scrollbar-width: thin;
+        }
+        /* 右侧画布区 */
+        .canvas-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .canvas-pair {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .canvas-card {
+            background: white;
+            border-radius: 1.25rem;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            flex: 1;
+            text-align: center;
+            padding: 0.8rem 0.5rem 0.8rem 0.5rem;
+            transition: transform 0.1s;
+        }
+        .canvas-card h3 {
+            margin: 0 0 0.6rem 0;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #1e293b;
+            letter-spacing: -0.2px;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            width: 100%;
+            height: auto;
+            cursor: crosshair;
+        }
+        /* 控件样式 */
+        .section {
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+        .section-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4b5563;
+            margin-bottom: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .matrix-input {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+            background: #f8fafc;
+            padding: 0.8rem;
+            border-radius: 1rem;
+        }
+        .matrix-input input {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.8rem;
+            padding: 0.6rem 0.5rem;
+            font-family: monospace;
+            font-weight: 500;
+            text-align: center;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .matrix-input input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin: 0.8rem 0 0.2rem;
+        }
+        button {
+            background: #f1f5f9;
+            border: none;
+            padding: 0.5rem 0.9rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #1e293b;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+        button.primary {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 2px 5px rgba(59,130,246,0.3);
+        }
+        button.primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        button:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+        .param-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.8rem 0;
+            flex-wrap: wrap;
+        }
+        .param-row label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #334155;
+            min-width: 55px;
+        }
+        .param-row input, .param-row select {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 1rem;
+            padding: 0.4rem 0.7rem;
+            font-size: 0.8rem;
+            flex: 1;
+            min-width: 70px;
+        }
+        .graph-type-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        .type-btn {
+            flex: 1;
+            text-align: center;
+            background: #f1f5f9;
+            border-radius: 2rem;
+            padding: 0.4rem 0;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .type-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        .vertex-table {
+            background: #f9f9fb;
+            border-radius: 1rem;
+            padding: 0.6rem;
+            margin-top: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .vertex-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+        .vertex-row input {
+            width: 70px;
+            padding: 4px 6px;
+            border-radius: 0.6rem;
+            border: 1px solid #cbd5e1;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        .small-btn {
+            background: #e2e8f0;
+            border-radius: 1rem;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+        }
+        .warning-note {
+            font-size: 0.7rem;
+            color: #6c757d;
+            margin-top: 5px;
+            text-align: center;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 1rem;
+            color: #6c757d;
+        }
+        @media (max-width: 800px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .control-panel {
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <div class="main-grid">
+        <!-- 左侧控制区 -->
+        <div class="control-panel">
+            <div class="section">
+                <div class="section-title">✧ 变换矩阵 M = [[a, b], [c, d]]</div>
+                <div class="matrix-input">
+                    <input type="number" id="matA" value="1" step="0.1" placeholder="a">
+                    <input type="number" id="matB" value="0" step="0.1" placeholder="b">
+                    <input type="number" id="matC" value="0" step="0.1" placeholder="c">
+                    <input type="number" id="matD" value="1" step="0.1" placeholder="d">
+                </div>
+                <div class="button-group">
+                    <button id="resetMatBtn">单位矩阵</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">⚡ 快速变换</div>
+                <div class="param-row">
+                    <label>旋转角°</label>
+                    <input type="number" id="rotAngle" value="45" step="5">
+                    <button id="applyRotBtn">旋转</button>
+                </div>
+                <div class="param-row">
+                    <label>投影</label>
+                    <select id="projType">
+                        <option value="x">投影到 X 轴</option>
+                        <option value="y">投影到 Y 轴</option>
+                        <option value="line">投影到直线 (角度)</option>
+                    </select>
+                    <input type="number" id="projAngle" value="45" step="5" placeholder="角度°" style="width:80px">
+                    <button id="applyProjBtn">应用</button>
+                </div>
+                <div class="param-row">
+                    <label>伸缩 (sx, sy)</label>
+                    <input type="number" id="scaleX" value="1.5" step="0.1" style="width:70px">
+                    <input type="number" id="scaleY" value="0.8" step="0.1" style="width:70px">
+                    <button id="applyScaleBtn">伸缩</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📐 图形定义</div>
+                <div class="graph-type-selector">
+                    <div data-type="square" class="type-btn">正方形</div>
+                    <div data-type="rect" class="type-btn">矩形</div>
+                    <div data-type="circle" class="type-btn">圆形</div>
+                    <div data-type="custom" class="type-btn active">自定义多边形</div>
+                </div>
+                <!-- 动态参数区 -->
+                <div id="shapeParamsPanel">
+                    <!-- 正方形/矩形参数 -->
+                    <div id="rectParams" style="display: none;">
+                        <div class="param-row"><label>中心X</label><input type="number" id="centerX" value="0" step="0.2"></div>
+                        <div class="param-row"><label>中心Y</label><input type="number" id="centerY" value="0" step="0.2"></div>
+                        <div class="param-row"><label>宽</label><input type="number" id="widthVal" value="3" step="0.2"></div>
+                        <div class="param-row"><label>高</label><input type="number" id="heightVal" value="3" step="0.2"></div>
+                        <button id="applyRectBtn" class="small-btn">更新图形</button>
+                    </div>
+                    <div id="circleParams" style="display: none;">
+                        <div class="param-row"><label>圆心X</label><input type="number" id="circCX" value="0" step="0.2"></div>
+                        <div class="param-row"><label>圆心Y</label><input type="number" id="circCY" value="0" step="0.2"></div>
+                        <div class="param-row"><label>半径</label><input type="number" id="radiusVal" value="2.2" step="0.2" min="0.3"></div>
+                        <button id="applyCircleBtn" class="small-btn">更新图形</button>
+                    </div>
+                    <div id="customParams" style="display: block;">
+                        <div class="param-row" style="justify-content:space-between">
+                            <span style="font-weight:500;">✎ 顶点控制 (拖拽/编辑)</span>
+                            <button id="addVertexBtn" class="small-btn">+ 加点</button>
+                        </div>
+                        <div id="vertexList" class="vertex-table">
+                            <!-- 动态顶点列表 -->
+                        </div>
+                        <div class="warning-note">✨ 左侧画布里可直接拖拽顶点 (仅自定义模式)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="warning-note" style="background:#fef9e3; border-radius:1rem; padding:6px;">✔ 矩阵/图形实时联动右侧变换图</div>
+        </div>
+
+        <!-- 右侧画布区 -->
+        <div class="canvas-area">
+            <div class="canvas-pair">
+                <div class="canvas-card">
+                    <h3>📌 原始图形</h3>
+                    <canvas id="canvasLeft" width="450" height="450" style="width:100%; height:auto; max-width:450px; aspect-ratio:1/1"></canvas>
+                    <div style="font-size:0.7rem; margin-top:5px;">坐标范围 [-6,6]  |  可拖拽顶点(自定义模式)</div>
+                </div>
+                <div class="canvas-card">
+                    <h3>✨ 变换后 (M · P)</h3>
+                    <canvas id="canvasRight" width="450" height="450" style="width:100%; height:auto; max-width:450px; aspect-ratio:1/1"></canvas>
+                    <div style="font-size:0.7rem; margin-top:5px;">线性变换效果实时更新</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>二维线性变换: 旋转 | 投影 | 伸缩 | 自定义矩阵 | 多边形可拖拽/编辑顶点</footer>
+</div>
+
+<script>
+    (function(){
+        // ----- 世界坐标系范围: [-6,6] x [-6,6] (画布映射)
+        const WORLD_MIN = -6, WORLD_MAX = 6;
+        // canvas引用
+        const leftCanvas = document.getElementById('canvasLeft');
+        const rightCanvas = document.getElementById('canvasRight');
+        let ctxLeft = leftCanvas.getContext('2d');
+        let ctxRight = rightCanvas.getContext('2d');
+        
+        // 当前图形数据: vertices 为世界坐标点集 (用于绘制多边形/圆采样点)
+        let currentVertices = [];   // 存储点集 {x, y} 或数组格式
+        let currentShapeType = 'custom';   // square, rect, circle, custom
+        
+        // 矩形/圆临时参数存储
+        let rectParams = { cx:0, cy:0, w:3, h:3 };
+        let circleParams = { cx:0, cy:0, r:2.2 };
+        // 自定义多边形默认初始四边形
+        let customPoints = [[-2, -2], [2, -2], [2, 2], [-2, 2]];
+        
+        // 矩阵元素
+        let matrix = { a:1, b:0, c:0, d:1 };
+        
+        // 拖拽交互状态
+        let dragging = false;
+        let dragIndex = -1;
+        let currentDragType = 'custom'; // 仅custom模式支持拖拽
+        
+        // 辅助函数: 世界->画布坐标 (canvas尺寸)
+        function worldToCanvas(x, y, canvas) {
+            const w = canvas.width, h = canvas.height;
+            const px = ((x - WORLD_MIN) / (WORLD_MAX - WORLD_MIN)) * w;
+            const py = h - ((y - WORLD_MIN) / (WORLD_MAX - WORLD_MIN)) * h;
+            return { x: px, y: py };
+        }
+        
+        // 画布->世界坐标
+        function canvasToWorld(px, py, canvas) {
+            const w = canvas.width, h = canvas.height;
+            const x = WORLD_MIN + (px / w) * (WORLD_MAX - WORLD_MIN);
+            const y = WORLD_MIN + ((h - py) / h) * (WORLD_MAX - WORLD_MIN);
+            return { x, y };
+        }
+        
+        // 绘制背景网格和坐标轴 (通用)
+        function drawGrid(ctx, canvas) {
+            const w = canvas.width, h = canvas.height;
+            ctx.save();
+            ctx.strokeStyle = "#e2e8f0";
+            ctx.lineWidth = 0.8;
+            // 网格
+            for (let x = -6; x <= 6; x+=1) {
+                const start = worldToCanvas(x, -6, canvas);
+                const end = worldToCanvas(x, 6, canvas);
+                ctx.beginPath();
+                ctx.moveTo(start.x, start.y);
+                ctx.lineTo(end.x, end.y);
+                ctx.stroke();
+            }
+            for (let y = -6; y <= 6; y+=1) {
+                const start = worldToCanvas(-6, y, canvas);
+                const end = worldToCanvas(6, y, canvas);
+                ctx.beginPath();
+                ctx.moveTo(start.x, start.y);
+                ctx.lineTo(end.x, end.y);
+                ctx.stroke();
+            }
+            // 轴
+            ctx.beginPath();
+            let originX = worldToCanvas(0,0,canvas);
+            let axisXEnd = worldToCanvas(6,0,canvas);
+            let axisYEnd = worldToCanvas(0,6,canvas);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#94a3b8";
+            ctx.moveTo(originX.x, originX.y);
+            ctx.lineTo(axisXEnd.x, axisXEnd.y);
+            ctx.moveTo(originX.x, originX.y);
+            ctx.lineTo(axisYEnd.x, axisYEnd.y);
+            ctx.stroke();
+            // 箭头装饰
+            ctx.fillStyle = "#475569";
+            // 简单原点标记
+            ctx.beginPath();
+            ctx.arc(originX.x, originX.y, 3, 0, 2*Math.PI);
+            ctx.fillStyle = "#cbd5e1";
+            ctx.fill();
+            ctx.restore();
+        }
+        
+        // 绘制图形 (给定点集，闭合多边形)
+        function drawShape(ctx, canvas, vertices, fillColor = "rgba(59,130,246,0.35)", strokeColor = "#3b82f6") {
+            if(!vertices || vertices.length < 2) return;
+            ctx.save();
+            ctx.beginPath();
+            // 支持点格式 {x,y} 或 [x,y]
+            let first = vertices[0];
+            let p0 = Array.isArray(first) ? {x:first[0], y:first[1]} : {x:first.x, y:first.y};
+            let start = worldToCanvas(p0.x, p0.y, canvas);
+            ctx.moveTo(start.x, start.y);
+            for(let i=1; i<vertices.length; i++) {
+                let pt = vertices[i];
+                let p = Array.isArray(pt) ? {x:pt[0], y:pt[1]} : {x:pt.x, y:pt.y};
+                let coord = worldToCanvas(p.x, p.y, canvas);
+                ctx.lineTo(coord.x, coord.y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = fillColor;
+            ctx.fill();
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            // 绘制控制点 (仅当自定义模式且为左边画布)
+            if(currentShapeType === 'custom' && canvas === leftCanvas) {
+                ctx.fillStyle = "#ef4444";
+                for(let i=0; i<vertices.length; i++) {
+                    let pt = vertices[i];
+                    let p = Array.isArray(pt) ? {x:pt[0], y:pt[1]} : {x:pt.x, y:pt.y};
+                    let coord = worldToCanvas(p.x, p.y, canvas);
+                    ctx.beginPath();
+                    ctx.arc(coord.x, coord.y, 5, 0, 2*Math.PI);
+                    ctx.fillStyle = "#f97316";
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+            ctx.restore();
+        }
+        
+        // 根据类型生成顶点 (同步全局 currentVertices)
+        function regenerateVerticesByType() {
+            if(currentShapeType === 'square') {
+                let w = rectParams.w;
+                let h = rectParams.w; // 正方形强制宽高一致
+                let cx = rectParams.cx, cy = rectParams.cy;
+                let halfW = w/2, halfH = h/2;
+                currentVertices = [
+                    {x: cx-halfW, y: cy-halfH},
+                    {x: cx+halfW, y: cy-halfH},
+                    {x: cx+halfW, y: cy+halfH},
+                    {x: cx-halfW, y: cy+halfH}
+                ];
+            } else if(currentShapeType === 'rect') {
+                let w = rectParams.w, h = rectParams.h;
+                let cx = rectParams.cx, cy = rectParams.cy;
+                let halfW = w/2, halfH = h/2;
+                currentVertices = [
+                    {x: cx-halfW, y: cy-halfH},
+                    {x: cx+halfW, y: cy-halfH},
+                    {x: cx+halfW, y: cy+halfH},
+                    {x: cx-halfW, y: cy+halfH}
+                ];
+            } else if(currentShapeType === 'circle') {
+                let cx = circleParams.cx, cy = circleParams.cy, r = circleParams.r;
+                const segments = 64;
+                let pts = [];
+                for(let i=0; i<=segments; i++) {
+                    let angle = (i / segments) * Math.PI * 2;
+                    let x = cx + r * Math.cos(angle);
+                    let y = cy + r * Math.sin(angle);
+                    pts.push({x, y});
+                }
+                currentVertices = pts;
+            } else if(currentShapeType === 'custom') {
+                // 深拷贝customPoints (存储格式为[x,y])
+                currentVertices = customPoints.map(p => ({x: p[0], y: p[1]}));
+            }
+            updateVertexTableUI();   // 若custom模式则刷新表格
+        }
+        
+        // 对点集应用矩阵变换
+        function applyMatrixToPoints(points, mat) {
+            return points.map(p => {
+                let x = p.x, y = p.y;
+                let newX = mat.a * x + mat.b * y;
+                let newY = mat.c * x + mat.d * y;
+                return {x: newX, y: newY};
+            });
+        }
+        
+        // 绘制左右canvas
+        function drawBoth() {
+            if(!ctxLeft || !ctxRight) return;
+            // 左: 原始图形
+            ctxLeft.clearRect(0, 0, leftCanvas.width, leftCanvas.height);
+            drawGrid(ctxLeft, leftCanvas);
+            if(currentVertices.length) drawShape(ctxLeft, leftCanvas, currentVertices, "rgba(59,130,246,0.3)", "#2563eb");
+            
+            // 右: 变换后
+            ctxRight.clearRect(0, 0, rightCanvas.width, rightCanvas.height);
+            drawGrid(ctxRight, rightCanvas);
+            if(currentVertices.length) {
+                let transformed = applyMatrixToPoints(currentVertices, matrix);
+                drawShape(ctxRight, rightCanvas, transformed, "rgba(239,68,68,0.3)", "#dc2626");
+            }
+        }
+        
+        // 更新矩阵输入框值
+        function updateMatrixInputs() {
+            document.getElementById('matA').value = matrix.a;
+            document.getElementById('matB').value = matrix.b;
+            document.getElementById('matC').value = matrix.c;
+            document.getElementById('matD').value = matrix.d;
+        }
+        
+        function readMatrixFromInput() {
+            matrix.a = parseFloat(document.getElementById('matA').value) || 0;
+            matrix.b = parseFloat(document.getElementById('matB').value) || 0;
+            matrix.c = parseFloat(document.getElementById('matC').value) || 0;
+            matrix.d = parseFloat(document.getElementById('matD').value) || 0;
+            drawBoth();
+        }
+        
+        // 刷新UI参数面板显示
+        function updateShapePanelUI() {
+            document.getElementById('rectParams').style.display = (currentShapeType==='square' || currentShapeType==='rect') ? 'block' : 'none';
+            document.getElementById('circleParams').style.display = (currentShapeType==='circle') ? 'block' : 'none';
+            document.getElementById('customParams').style.display = (currentShapeType==='custom') ? 'block' : 'none';
+            // 特殊: 正方形与矩形区分显示标签
+            if(currentShapeType === 'square') {
+                document.querySelector('#rectParams .param-row:nth-child(3) label').innerText = '边长';
+                document.querySelector('#rectParams .param-row:nth-child(4)').style.display = 'none';
+                document.getElementById('widthVal').value = rectParams.w;
+            } else if(currentShapeType === 'rect') {
+                document.querySelector('#rectParams .param-row:nth-child(3) label').innerText = '宽';
+                document.querySelector('#rectParams .param-row:nth-child(4)').style.display = 'flex';
+                document.getElementById('widthVal').value = rectParams.w;
+                document.getElementById('heightVal').value = rectParams.h;
+            }
+            if(currentShapeType === 'circle') {
+                document.getElementById('circCX').value = circleParams.cx;
+                document.getElementById('circCY').value = circleParams.cy;
+                document.getElementById('radiusVal').value = circleParams.r;
+            }
+        }
+        
+        // 刷新自定义模式的顶点表格
+        function updateVertexTableUI() {
+            const container = document.getElementById('vertexList');
+            if(!container) return;
+            if(currentShapeType !== 'custom') return;
+            // 同步 customPoints
+            if(currentVertices.length) {
+                customPoints = currentVertices.map(p => [p.x, p.y]);
+            }
+            container.innerHTML = '';
+            customPoints.forEach((pt, idx) => {
+                const row = document.createElement('div');
+                row.className = 'vertex-row';
+                row.innerHTML = `
+                    <span style="font-size:0.7rem; width:24px;">${idx+1}</span>
+                    <input type="number" class="vx" value="${pt[0].toFixed(2)}" step="0.1" style="width:70px;">
+                    <input type="number" class="vy" value="${pt[1].toFixed(2)}" step="0.1" style="width:70px;">
+                    <button class="small-btn delVertex" data-idx="${idx}" style="background:#fee2e2;">✖</button>
+                `;
+                container.appendChild(row);
+                const xInp = row.querySelector('.vx');
+                const yInp = row.querySelector('.vy');
+                const delBtn = row.querySelector('.delVertex');
+                xInp.addEventListener('change', (e) => {
+                    let newX = parseFloat(e.target.value);
+                    if(!isNaN(newX)) { customPoints[idx][0] = Math.min(WORLD_MAX, Math.max(WORLD_MIN, newX)); regenerateVerticesByType(); drawBoth(); updateVertexTableUI();}
+                });
+                yInp.addEventListener('change', (e) => {
+                    let newY = parseFloat(e.target.value);
+                    if(!isNaN(newY)) { customPoints[idx][1] = Math.min(WORLD_MAX, Math.max(WORLD_MIN, newY)); regenerateVerticesByType(); drawBoth(); updateVertexTableUI();}
+                });
+                delBtn.addEventListener('click', () => {
+                    if(customPoints.length <= 3) return;
+                    customPoints.splice(idx,1);
+                    regenerateVerticesByType();
+                    drawBoth();
+                    updateVertexTableUI();
+                });
+            });
+        }
+        
+        // 全局更新 (形状参数改变后调用)
+        function fullUpdate() {
+            regenerateVerticesByType();
+            drawBoth();
+        }
+        
+        // 事件绑定: 矩形/圆应用
+        function bindShapeEvents() {
+            document.getElementById('applyRectBtn').addEventListener('click', () => {
+                let cx = parseFloat(document.getElementById('centerX').value);
+                let cy = parseFloat(document.getElementById('centerY').value);
+                let w = parseFloat(document.getElementById('widthVal').value);
+                let h = (currentShapeType === 'square') ? w : parseFloat(document.getElementById('heightVal').value);
+                if(isNaN(cx)) cx=0; if(isNaN(cy)) cy=0; if(isNaN(w)) w=3; if(isNaN(h)) h=3;
+                rectParams = {cx, cy, w: Math.max(0.3,w), h: Math.max(0.3,h)};
+                if(currentShapeType === 'square') rectParams.h = rectParams.w;
+                fullUpdate();
+            });
+            document.getElementById('applyCircleBtn').addEventListener('click', () => {
+                let cx = parseFloat(document.getElementById('circCX').value);
+                let cy = parseFloat(document.getElementById('circCY').value);
+                let r = parseFloat(document.getElementById('radiusVal').value);
+                if(isNaN(cx)) cx=0; if(isNaN(cy)) cy=0; if(isNaN(r) || r<=0) r=1;
+                circleParams = {cx, cy, r: Math.min(4.5, Math.max(0.3, r))};
+                fullUpdate();
+            });
+            document.getElementById('addVertexBtn').addEventListener('click', () => {
+                if(currentShapeType !== 'custom') return;
+                let avgX = 0, avgY = 0;
+                if(customPoints.length) {
+                    customPoints.forEach(p=>{avgX+=p[0]; avgY+=p[1];});
+                    avgX/=customPoints.length; avgY/=customPoints.length;
+                } else { avgX=0; avgY=0;}
+                customPoints.push([avgX+0.8, avgY+0.8]);
+                regenerateVerticesByType();
+                drawBoth();
+                updateVertexTableUI();
+            });
+        }
+        
+        // 左侧拖拽交互 (仅自定义模式)
+        function initDragOnLeft() {
+            let active = false;
+            function getMouseWorld(e, canvas) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                let mouseX = (e.clientX - rect.left) * scaleX;
+                let mouseY = (e.clientY - rect.top) * scaleY;
+                return canvasToWorld(mouseX, mouseY, canvas);
+            }
+            leftCanvas.addEventListener('mousedown', (e) => {
+                if(currentShapeType !== 'custom') return;
+                const worldPt = getMouseWorld(e, leftCanvas);
+                let minDist = 0.25;
+                let idx = -1;
+                for(let i=0; i<currentVertices.length; i++) {
+                    let p = currentVertices[i];
+                    let dx = p.x - worldPt.x, dy = p.y - worldPt.y;
+                    let dist = Math.hypot(dx,dy);
+                    if(dist < minDist) { minDist = dist; idx = i; }
+                }
+                if(idx !== -1) {
+                    dragging = true;
+                    dragIndex = idx;
+                    e.preventDefault();
+                }
+            });
+            window.addEventListener('mousemove', (e) => {
+                if(!dragging || dragIndex === -1 || currentShapeType !== 'custom') return;
+                const worldPt = getMouseWorld(e, leftCanvas);
+                let newX = Math.min(WORLD_MAX, Math.max(WORLD_MIN, worldPt.x));
+                let newY = Math.min(WORLD_MAX, Math.max(WORLD_MIN, worldPt.y));
+                if(currentVertices[dragIndex]) {
+                    currentVertices[dragIndex].x = newX;
+                    currentVertices[dragIndex].y = newY;
+                    // 同步customPoints
+                    if(currentShapeType === 'custom') {
+                        customPoints[dragIndex] = [newX, newY];
+                    }
+                    regenerateVerticesByType(); // 刷新保持同步
+                    drawBoth();
+                    updateVertexTableUI();
+                }
+            });
+            window.addEventListener('mouseup', () => {
+                dragging = false;
+                dragIndex = -1;
+            });
+        }
+        
+        // 快速变换逻辑
+        function applyRotation() {
+            let deg = parseFloat(document.getElementById('rotAngle').value);
+            let rad = deg * Math.PI/180;
+            let cos = Math.cos(rad), sin = Math.sin(rad);
+            matrix = { a: cos, b: -sin, c: sin, d: cos };
+            updateMatrixInputs();
+            drawBoth();
+        }
+        function applyProjection() {
+            let type = document.getElementById('projType').value;
+            if(type === 'x') { matrix = { a:1, b:0, c:0, d:0 }; }
+            else if(type === 'y') { matrix = { a:0, b:0, c:0, d:1 }; }
+            else {
+                let angleDeg = parseFloat(document.getElementById('projAngle').value);
+                let rad = angleDeg * Math.PI/180;
+                let ux = Math.cos(rad), uy = Math.sin(rad);
+                let ux2 = ux*ux, uy2 = uy*uy, uxuy = ux*uy;
+                matrix = { a: ux2, b: uxuy, c: uxuy, d: uy2 };
+            }
+            updateMatrixInputs();
+            drawBoth();
+        }
+        function applyScale() {
+            let sx = parseFloat(document.getElementById('scaleX').value);
+            let sy = parseFloat(document.getElementById('scaleY').value);
+            if(isNaN(sx)) sx=1; if(isNaN(sy)) sy=1;
+            matrix = { a: sx, b: 0, c: 0, d: sy };
+            updateMatrixInputs();
+            drawBoth();
+        }
+        
+        // 图形切换
+        function setShapeType(type) {
+            currentShapeType = type;
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                if(btn.dataset.type === type) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            if(type === 'square') { rectParams = {cx:0, cy:0, w:3, h:3}; document.getElementById('centerX').value=0; document.getElementById('centerY').value=0; document.getElementById('widthVal').value=3; fullUpdate();}
+            if(type === 'rect') { rectParams = {cx:0, cy:0, w:3.5, h:2.5}; document.getElementById('centerX').value=0; document.getElementById('centerY').value=0; document.getElementById('widthVal').value=3.5; document.getElementById('heightVal').value=2.5; fullUpdate();}
+            if(type === 'circle') { circleParams = {cx:0, cy:0, r:2.2}; fullUpdate();}
+            if(type === 'custom') { customPoints = customPoints.length? customPoints : [[-2,-2],[2,-2],[2,2],[-2,2]]; regenerateVerticesByType(); drawBoth(); updateVertexTableUI();}
+            updateShapePanelUI();
+            if(type !== 'custom') updateVertexTableUI(); // 清空显示
+            else updateVertexTableUI();
+            fullUpdate();
+        }
+        
+        // 事件绑定总装
+        function bindEvents() {
+            document.getElementById('matA').addEventListener('input', readMatrixFromInput);
+            document.getElementById('matB').addEventListener('input', readMatrixFromInput);
+            document.getElementById('matC').addEventListener('input', readMatrixFromInput);
+            document.getElementById('matD').addEventListener('input', readMatrixFromInput);
+            document.getElementById('resetMatBtn').addEventListener('click', () => { matrix={a:1,b:0,c:0,d:1}; updateMatrixInputs(); drawBoth();});
+            document.getElementById('applyRotBtn').addEventListener('click', applyRotation);
+            document.getElementById('applyProjBtn').addEventListener('click', applyProjection);
+            document.getElementById('applyScaleBtn').addEventListener('click', applyScale);
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.addEventListener('click', () => setShapeType(btn.dataset.type));
+            });
+            bindShapeEvents();
+            // 监听矩形/圆参数同步
+            document.getElementById('centerX').addEventListener('change', () => { if(currentShapeType !== 'custom') fullUpdate(); });
+            document.getElementById('centerY').addEventListener('change', () => { if(currentShapeType !== 'custom') fullUpdate(); });
+            document.getElementById('widthVal').addEventListener('change', () => { if(currentShapeType !== 'custom') fullUpdate(); });
+            document.getElementById('heightVal').addEventListener('change', () => { if(currentShapeType === 'rect') fullUpdate(); });
+            document.getElementById('circCX').addEventListener('change', () => { if(currentShapeType === 'circle') fullUpdate();});
+            document.getElementById('circCY').addEventListener('change', () => { if(currentShapeType === 'circle') fullUpdate();});
+            document.getElementById('radiusVal').addEventListener('change', () => { if(currentShapeType === 'circle') fullUpdate();});
+        }
+        
+        function init() {
+            bindEvents();
+            setShapeType('custom');      // 默认自定义多边形，可拖拽
+            initDragOnLeft();
+            regenerateVerticesByType();
+            drawBoth();
+        }
+        init();
+    })();
+</script>
+</body>
+</html>

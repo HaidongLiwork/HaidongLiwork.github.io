@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交互式矩阵 · 行列式实验室 (纯分数)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #f7f9fc 0%, #eef2f5 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .card {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 28px 32px;
+            box-shadow: 0 25px 45px -12px rgba(0, 20, 40, 0.35), inset 0 1px 2px rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        h1 {
+            margin: 0 0 12px 0;
+            font-weight: 600;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+            color: #1e2b3f;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        h1 small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            background: #d0ddea;
+            padding: 4px 14px;
+            border-radius: 40px;
+            color: #1e3b5c;
+        }
+        .top-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            background: #ffffffc9;
+            padding: 16px 20px;
+            border-radius: 60px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 14px rgba(0,10,30,0.1);
+        }
+        .size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #edf2f9;
+            padding: 5px 16px 5px 20px;
+            border-radius: 40px;
+        }
+        .size-control label {
+            font-weight: 550;
+            color: #1f3a5f;
+        }
+        .size-control input {
+            width: 70px;
+            padding: 8px 10px;
+            border: none;
+            background: white;
+            border-radius: 30px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
+            border: 1px solid #cbd6e4;
+        }
+        button {
+            background: #1e3557;
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,30,60,0.2);
+            transition: all 0.15s ease;
+            border: 1px solid #ffffff50;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        button:hover {
+            background: #244673;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 18px -6px #1e3a5f;
+        }
+        button.secondary {
+            background: #ffffffd9;
+            color: #1e2b3f;
+            border: 1px solid #b3c4d8;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+        }
+        button.secondary:hover {
+            background: white;
+            border-color: #7f9bc0;
+        }
+        .det-panel {
+            background: #e3eaf3;
+            border-radius: 40px;
+            padding: 14px 24px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #0b2b4a;
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: auto;
+        }
+        .det-panel span {
+            background: #0b1f33;
+            color: white;
+            padding: 6px 22px;
+            border-radius: 60px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+        .matrix-wrapper {
+            background: #d9e2ed70;
+            border-radius: 32px;
+            padding: 28px 20px;
+            margin: 25px 0 30px 0;
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+            backdrop-filter: blur(4px);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .matrix-table {
+            border-collapse: collapse;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 12px 25px -8px rgba(0,20,50,0.25);
+        }
+        .matrix-table td {
+            padding: 0;
+            border: 1px solid #ced9e8;
+        }
+        .matrix-table input {
+            width: 90px;
+            height: 70px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border: none;
+            outline: none;
+            background: transparent;
+            transition: background 0.2s, box-shadow 0.2s;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            padding: 0 5px;
+        }
+        .matrix-table input:focus {
+            background: #f0f5ff;
+            box-shadow: inset 0 0 0 3px #8aadf0;
+        }
+        .highlight-cell {
+            background-color: #ffe570 !important;
+            transition: background-color 0.1s ease;
+        }
+        .operation-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-top: 25px;
+        }
+        .op-group {
+            background: #ffffffde;
+            border-radius: 28px;
+            padding: 18px 20px;
+            flex: 1 1 260px;
+            box-shadow: 0 10px 18px -10px #1f2e44;
+            border: 1px solid #ffffffb0;
+        }
+        .op-group h3 {
+            margin: 0 0 16px 0;
+            font-size: 1.1rem;
+            color: #1e3a5f;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 2px solid #b5cef0;
+            padding-bottom: 8px;
+        }
+        .row-flex {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .row-flex label {
+            font-size: 0.9rem;
+            color: #2f405c;
+        }
+        .row-flex select, .row-flex input {
+            background: white;
+            border: 1px solid #bdc7d6;
+            border-radius: 30px;
+            padding: 6px 10px;
+            font-size: 0.9rem;
+            min-width: 70px;
+            outline: none;
+        }
+        .row-flex input {
+            width: 90px;
+        }
+        .row-flex button {
+            padding: 6px 16px;
+        }
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin: 5px 0 10px;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        footer {
+            margin-top: 20px;
+            color: #4a5f7a;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        .undo-btn {
+            background: #4f6f8f;
+            margin-right: 10px;
+        }
+        .step-panel {
+            flex: 1 1 100%;
+            margin-top: 10px;
+        }
+        .step-content {
+            background: #f4f7fc;
+            border-radius: 24px;
+            padding: 18px;
+            margin-top: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 220px;
+            overflow-y: auto;
+            border: 1px solid #ccdaea;
+            color: #1d2f47;
+        }
+    </style>
+</head>
+<body>
+<div class="card" id="app">
+    <h1>
+        ✦ 矩阵行列式实验室
+        <small>n ≤ 11 · 纯分数 · 上三角步骤</small>
+    </h1>
+
+    <!-- 顶部控制栏 -->
+    <div class="top-bar">
+        <div class="size-control">
+            <label>大小 n =</label>
+            <input type="number" id="matrixSize" min="1" max="11" value="3" step="1">
+            <button id="generateBtn" class="secondary">生成单位阵</button>
+            <button id="randomBtn" class="secondary">🎲 随机整数矩阵</button>
+        </div>
+        <button id="undoBtn" class="undo-btn" style="background:#2f4b6e;">↶ 撤销</button>
+        <div class="det-panel">
+            det ≈
+            <span id="detDisplay">1.00</span>
+        </div>
+    </div>
+
+    <!-- 矩阵展示区 (分数输入/显示) -->
+    <div class="matrix-wrapper" id="matrixContainer">
+        <!-- 动态渲染 -->
+    </div>
+
+    <!-- 操作区: 所有行/列变换 (因子支持分数) -->
+    <div class="operation-panel">
+        <!-- 交换行 / 列 -->
+        <div class="op-group">
+            <h3>⤭ 交换行 / 列</h3>
+            <div class="row-flex">
+                <label>行</label>
+                <select id="swapRow1"></select><span> ↔ </span>
+                <select id="swapRow2"></select>
+                <button id="swapRowBtn">交换行</button>
+            </div>
+            <div class="row-flex">
+                <label>列</label>
+                <select id="swapCol1"></select><span> ↔ </span>
+                <select id="swapCol2"></select>
+                <button id="swapColBtn">交换列</button>
+            </div>
+        </div>
+
+        <!-- 转置 / 数乘 -->
+        <div class="op-group">
+            <h3>⟳ 转置 & 数乘</h3>
+            <div class="row-flex" style="justify-content: space-between;">
+                <button id="transposeBtn" style="flex:1;">转置矩阵 ⟲</button>
+            </div>
+            <div class="radio-group">
+                <label><input type="radio" name="scaleType" value="row" checked> 行</label>
+                <label><input type="radio" name="scaleType" value="col"> 列</label>
+            </div>
+            <div class="row-flex">
+                <select id="scaleIndex"></select>
+                <input type="text" id="scaleFactor" value="2" placeholder="因子 (如 1/2)">
+                <button id="scaleBtn">数乘</button>
+            </div>
+        </div>
+
+        <!-- 倍加: 某行(列)乘数加到另一行(列) -->
+        <div class="op-group">
+            <h3>➕ 倍加 (行/列)</h3>
+            <div class="radio-group">
+                <label><input type="radio" name="addType" value="row" checked> 行</label>
+                <label><input type="radio" name="addType" value="col"> 列</label>
+            </div>
+            <div class="row-flex">
+                <select id="addSource"></select>
+                <span> × </span>
+                <input type="text" id="addFactor" value="1" placeholder="倍数 (如 3/4)">
+                <span> ➔ </span>
+                <select id="addTarget"></select>
+                <button id="addBtn">执行</button>
+            </div>
+            <p style="font-size:0.8rem; margin:8px 0 0; color:#555;">源×倍数 加到 目标</p>
+        </div>
+    </div>
+
+    <!-- 上三角步骤指导卡片 (分数步骤) -->
+    <div class="op-group step-panel">
+        <h3>📐 上三角步骤指导 (分数)</h3>
+        <button id="stepBtn" class="secondary" style="background: #e0e8f5; color:#1e3a5f;">✨ 生成上三角步骤</button>
+        <div id="stepDisplay" class="step-content">点击按钮生成基于分数的步骤说明</div>
+    </div>
+
+    <footer>输入分数(如 2/3) · 退格删除 · 所有按钮操作可撤销 · 行列式为小数近似</footer>
+</div>
+
+<script>
+    (function() {
+        // ---------- 分数工具 (分子/分母, 分母>0, 总是约分) ----------
+        class Fraction {
+            constructor(num, den = 1) {
+                if (den === 0) throw new Error("分母不能为0");
+                // 归一化: 分母为正
+                if (den < 0) {
+                    num = -num;
+                    den = -den;
+                }
+                // 约分
+                const g = gcd(Math.abs(num), den);
+                this.n = num / g;
+                this.d = den / g;
+            }
+
+            // 深拷贝
+            copy() {
+                return new Fraction(this.n, this.d);
+            }
+
+            // 转换为字符串
+            toString() {
+                if (this.d === 1) return this.n.toString();
+                return `${this.n}/${this.d}`;
+            }
+
+            // 转浮点数 (用于行列式显示)
+            toFloat() {
+                return this.n / this.d;
+            }
+
+            // 加法
+            add(other) {
+                return new Fraction(this.n * other.d + other.n * this.d, this.d * other.d);
+            }
+
+            // 减法
+            sub(other) {
+                return new Fraction(this.n * other.d - other.n * this.d, this.d * other.d);
+            }
+
+            // 乘法
+            mul(other) {
+                return new Fraction(this.n * other.n, this.d * other.d);
+            }
+
+            // 除法
+            div(other) {
+                return new Fraction(this.n * other.d, this.d * other.n);
+            }
+
+            // 相反数
+            neg() {
+                return new Fraction(-this.n, this.d);
+            }
+
+            // 判断是否为零
+            isZero() {
+                return this.n === 0;
+            }
+        }
+
+        // 最大公约数
+        function gcd(a, b) {
+            while (b !== 0) {
+                const t = b;
+                b = a % b;
+                a = t;
+            }
+            return a;
+        }
+
+        // 解析字符串为 Fraction，支持整数、小数、分数 a/b
+        function parseFraction(str) {
+            str = str.trim();
+            if (str === '') return null;
+            // 尝试分数 a/b
+            const parts = str.split('/');
+            if (parts.length === 2) {
+                const num = parseFloat(parts[0]);
+                const den = parseFloat(parts[1]);
+                if (!isNaN(num) && !isNaN(den) && den !== 0) {
+                    // 如果输入的是小数，先转为有理数近似？为了简单，直接转换浮点数为分数有精度问题。这里我们要求输入为整数分数形式，或整数。
+                    // 允许小数作为分子/分母？但我们推荐整数，不过可以处理。
+                    // 更健壮：将小数转为分数，但实现复杂。此处限制分子分母为整数（或可解析为整数）
+                    const numInt = Math.round(num); // 简单取整
+                    const denInt = Math.round(den);
+                    if (Math.abs(num - numInt) < 1e-12 && Math.abs(den - denInt) < 1e-12) {
+                        return new Fraction(numInt, denInt);
+                    }
+                }
+            }
+            // 尝试整数或浮点数
+            const num = parseFloat(str);
+            if (!isNaN(num)) {
+                // 将浮点数转为分数（近似）。这里简单处理：如果接近整数，则作为整数；否则保留小数？但题目要求分数，我们限制输入应为整数或形如 a/b。
+                // 对于随机整数，本来就是整数。如果用户输入小数，我们暂时转为分数（如 0.5 -> 1/2），需要更精确的转换。
+                // 为了简化，我们只接受整数或分数形式。如果用户输入小数，我们视为精确值？由于要求纯分数，我们直接拒绝小数输入，转为整数部分。
+                // 更合理：如果输入小数，尝试用有理数逼近。但实现复杂，我们要求用户使用分数形式。如果输入小数，我们视为分子/1，失去精度。
+                // 这里采用折衷：将浮点数转为最简分数？不做了，提示用户输入整数或分数。
+                // 但为了功能，如果输入 0.5，我们将它视为 1/2 吗？需要实现浮点转分数，简单方法：乘以分母，但不知分母。
+                // 使用一个简单算法：将小数转换为分数（最多分母1000）。
+                const eps = 1e-10;
+                let bestNum = 0, bestDen = 1, bestErr = Math.abs(num);
+                for (let den = 1; den <= 1000; den++) {
+                    const numApprox = Math.round(num * den);
+                    const err = Math.abs(num - numApprox / den);
+                    if (err < bestErr - eps) {
+                        bestNum = numApprox;
+                        bestDen = den;
+                        bestErr = err;
+                        if (bestErr < 1e-12) break;
+                    }
+                }
+                return new Fraction(bestNum, bestDen);
+            }
+            return null; // 无法解析
+        }
+
+        // ---------- 全局状态 ----------
+        let n = 3;
+        let matrix = []; // 二维数组，每个元素为 Fraction 对象
+
+        let historyStack = [];
+        const MAX_HISTORY = 20;
+
+        // DOM 元素
+        const container = document.getElementById('matrixContainer');
+        const sizeInput = document.getElementById('matrixSize');
+        const generateBtn = document.getElementById('generateBtn');
+        const randomBtn = document.getElementById('randomBtn');
+        const detSpan = document.getElementById('detDisplay');
+        const undoBtn = document.getElementById('undoBtn');
+        const stepBtn = document.getElementById('stepBtn');
+        const stepDisplay = document.getElementById('stepDisplay');
+
+        const swapRow1 = document.getElementById('swapRow1');
+        const swapRow2 = document.getElementById('swapRow2');
+        const swapCol1 = document.getElementById('swapCol1');
+        const swapCol2 = document.getElementById('swapCol2');
+        const scaleIndex = document.getElementById('scaleIndex');
+        const addSource = document.getElementById('addSource');
+        const addTarget = document.getElementById('addTarget');
+
+        const swapRowBtn = document.getElementById('swapRowBtn');
+        const swapColBtn = document.getElementById('swapColBtn');
+        const transposeBtn = document.getElementById('transposeBtn');
+        const scaleBtn = document.getElementById('scaleBtn');
+        const addBtn = document.getElementById('addBtn');
+
+        const scaleFactor = document.getElementById('scaleFactor');
+        const addFactor = document.getElementById('addFactor');
+
+        // 辅助函数：填充下拉框
+        function populateSelects() {
+            const selects = [swapRow1, swapRow2, swapCol1, swapCol2, scaleIndex, addSource, addTarget];
+            selects.forEach(sel => {
+                const currentVal = sel.value;
+                sel.innerHTML = '';
+                for (let i = 1; i <= n; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = i;
+                    sel.appendChild(opt);
+                }
+                if (currentVal && currentVal >= 1 && currentVal <= n) {
+                    sel.value = currentVal;
+                } else {
+                    sel.value = 1;
+                }
+            });
+        }
+
+        // 分数矩阵的行列式计算 (返回 Fraction 对象)
+        function computeDeterminantFraction(mat) {
+            // 深拷贝矩阵用于消元
+            const m = mat.map(row => row.map(f => f.copy()));
+            const size = m.length;
+            let det = new Fraction(1, 1);
+            // 高斯消元，记录行交换符号
+            for (let i = 0; i < size; i++) {
+                // 寻找非零主元
+                let pivot = i;
+                while (pivot < size && m[pivot][i].isZero()) pivot++;
+                if (pivot === size) return new Fraction(0, 1);
+                if (pivot !== i) {
+                    [m[i], m[pivot]] = [m[pivot], m[i]];
+                    det = det.mul(new Fraction(-1, 1));
+                }
+                // 主元值
+                const pivotVal = m[i][i];
+                det = det.mul(pivotVal);
+                // 消去下方
+                for (let j = i + 1; j < size; j++) {
+                    if (m[j][i].isZero()) continue;
+                    const factor = m[j][i].div(pivotVal); // 因子 = m[j][i] / pivotVal
+                    for (let k = i; k < size; k++) {
+                        m[j][k] = m[j][k].sub(factor.mul(m[i][k]));
+                    }
+                }
+            }
+            return det;
+        }
+
+        // 更新行列式显示 (使用浮点数近似)
+        function updateDeterminant() {
+            const detFrac = computeDeterminantFraction(matrix);
+            detSpan.textContent = detFrac.toFloat().toFixed(6).replace(/\.?0+$/, '') || '0';
+        }
+
+        // 渲染矩阵 (分数形式)
+        function renderMatrix() {
+            let html = '<table class="matrix-table">';
+            for (let r = 0; r < n; r++) {
+                html += '<tr>';
+                for (let c = 0; c < n; c++) {
+                    const frac = matrix[r][c];
+                    html += `<td><input type="text" data-row="${r}" data-col="${c}" value="${frac.toString()}" tabindex="${r * n + c + 1}"></td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</table>';
+            container.innerHTML = html;
+
+            const inputs = container.querySelectorAll('input');
+            inputs.forEach(inp => {
+                inp.addEventListener('input', function(e) {
+                    const row = parseInt(e.target.dataset.row);
+                    const col = parseInt(e.target.dataset.col);
+                    const raw = e.target.value;
+                    const frac = parseFraction(raw);
+                    if (frac) {
+                        matrix[row][col] = frac;
+                        e.target.value = frac.toString(); // 标准化显示
+                        updateDeterminant();
+                    }
+                    // 若解析失败，不更新矩阵，等待失焦处理
+                });
+
+                inp.addEventListener('blur', function(e) {
+                    const row = parseInt(e.target.dataset.row);
+                    const col = parseInt(e.target.dataset.col);
+                    let raw = e.target.value;
+                    let frac = parseFraction(raw);
+                    if (!frac) {
+                        // 无效输入回退0
+                        frac = new Fraction(0, 1);
+                        e.target.value = '0';
+                        matrix[row][col] = frac;
+                        updateDeterminant();
+                    } else {
+                        matrix[row][col] = frac;
+                        e.target.value = frac.toString();
+                        updateDeterminant();
+                    }
+                });
+            });
+        }
+
+        // 高亮
+        function highlight(rows = null, cols = null, all = false) {
+            const inputs = container.querySelectorAll('input');
+            const cells = [];
+            if (all) {
+                inputs.forEach(inp => cells.push(inp));
+            } else {
+                inputs.forEach(inp => {
+                    const r = parseInt(inp.dataset.row);
+                    const c = parseInt(inp.dataset.col);
+                    if (rows && rows.includes(r)) cells.push(inp);
+                    else if (cols && cols.includes(c)) cells.push(inp);
+                });
+            }
+            cells.forEach(cell => cell.classList.add('highlight-cell'));
+            setTimeout(() => {
+                cells.forEach(cell => cell.classList.remove('highlight-cell'));
+            }, 280);
+        }
+
+        // 历史管理
+        function pushHistory() {
+            // 深拷贝：每个Fraction也拷贝
+            const snapshot = matrix.map(row => row.map(f => f.copy()));
+            historyStack.push(snapshot);
+            if (historyStack.length > MAX_HISTORY) historyStack.shift();
+        }
+
+        function undo() {
+            if (historyStack.length === 0) return;
+            matrix = historyStack.pop();
+            refreshUI();
+            highlight(null, null, true);
+        }
+
+        // 初始化矩阵 (单位阵)
+        function initMatrix(identity = true) {
+            matrix = Array.from({ length: n }, (_, i) =>
+                Array.from({ length: n }, (_, j) => (identity && i === j) ? new Fraction(1,1) : new Fraction(0,1))
+            );
+        }
+
+        // 随机整数矩阵 (-9..9)
+        function randomMatrix() {
+            matrix = Array.from({ length: n }, () =>
+                Array.from({ length: n }, () => new Fraction(Math.floor(Math.random() * 19) - 9, 1))
+            );
+        }
+
+        // 刷新UI
+        function refreshUI() {
+            renderMatrix();
+            updateDeterminant();
+            populateSelects();
+        }
+
+        // --- 上三角步骤生成 (分数描述) ---
+        function generateUpperTriangularSteps() {
+            // 拷贝矩阵
+            let m = matrix.map(row => row.map(f => f.copy()));
+            const steps = [];
+            const n = m.length;
+            for (let col = 0; col < n; col++) {
+                // 寻找非零主元
+                let pivot = col;
+                while (pivot < n && m[pivot][col].isZero()) pivot++;
+                if (pivot === n) {
+                    steps.push(`第 ${col+1} 列主元为零，跳过该列。`);
+                    continue;
+                }
+                if (pivot !== col) {
+                    [m[col], m[pivot]] = [m[pivot], m[col]];
+                    steps.push(`交换第 ${col+1} 行和第 ${pivot+1} 行。`);
+                }
+                const pivotVal = m[col][col];
+                for (let row = col + 1; row < n; row++) {
+                    if (m[row][col].isZero()) continue;
+                    // factor = m[row][col] / pivotVal
+                    const factor = m[row][col].div(pivotVal);
+                    // 步骤描述：第 row+1 行 加上 第 col+1 行乘以 (-factor) 
+                    // 或者：减去 factor 倍
+                    steps.push(`第 ${row+1} 行 加上 第 ${col+1} 行 乘以 (${factor.neg().toString()})  (即减去 ${factor.toString()} 倍)`);
+                    for (let k = col; k < n; k++) {
+                        m[row][k] = m[row][k].sub(factor.mul(m[col][k]));
+                    }
+                }
+            }
+            steps.push('此时矩阵已化为上三角形式 (对角线以下元素为零)。');
+            return steps.join('\n');
+        }
+
+        // --- 事件绑定 ---
+        function bindEvents() {
+            generateBtn.addEventListener('click', () => {
+                let newSize = parseInt(sizeInput.value);
+                if (isNaN(newSize) || newSize < 1) newSize = 1;
+                if (newSize > 11) newSize = 11;
+                sizeInput.value = newSize;
+                n = newSize;
+                historyStack = [];
+                initMatrix(true);
+                pushHistory();
+                refreshUI();
+            });
+
+            randomBtn.addEventListener('click', () => {
+                pushHistory();
+                randomMatrix();
+                refreshUI();
+                highlight(null, null, true);
+            });
+
+            undoBtn.addEventListener('click', undo);
+
+            swapRowBtn.addEventListener('click', () => {
+                pushHistory();
+                const r1 = parseInt(swapRow1.value) - 1;
+                const r2 = parseInt(swapRow2.value) - 1;
+                if (r1 === r2) return;
+                [matrix[r1], matrix[r2]] = [matrix[r2], matrix[r1]];
+                refreshUI();
+                highlight([r1, r2], null);
+            });
+
+            swapColBtn.addEventListener('click', () => {
+                pushHistory();
+                const c1 = parseInt(swapCol1.value) - 1;
+                const c2 = parseInt(swapCol2.value) - 1;
+                if (c1 === c2) return;
+                for (let r = 0; r < n; r++) {
+                    [matrix[r][c1], matrix[r][c2]] = [matrix[r][c2], matrix[r][c1]];
+                }
+                refreshUI();
+                highlight(null, [c1, c2]);
+            });
+
+            transposeBtn.addEventListener('click', () => {
+                pushHistory();
+                const newMat = Array.from({ length: n }, (_, i) =>
+                    Array.from({ length: n }, (_, j) => matrix[j][i].copy())
+                );
+                matrix = newMat;
+                refreshUI();
+                highlight(null, null, true);
+            });
+
+            scaleBtn.addEventListener('click', () => {
+                pushHistory();
+                const type = document.querySelector('input[name="scaleType"]:checked').value;
+                const idx = parseInt(scaleIndex.value) - 1;
+                const factorStr = scaleFactor.value;
+                let factor = parseFraction(factorStr);
+                if (!factor) factor = new Fraction(1,1); // 默认1
+                if (type === 'row') {
+                    for (let c = 0; c < n; c++) matrix[idx][c] = matrix[idx][c].mul(factor);
+                    refreshUI();
+                    highlight([idx], null);
+                } else {
+                    for (let r = 0; r < n; r++) matrix[r][idx] = matrix[r][idx].mul(factor);
+                    refreshUI();
+                    highlight(null, [idx]);
+                }
+            });
+
+            addBtn.addEventListener('click', () => {
+                pushHistory();
+                const type = document.querySelector('input[name="addType"]:checked').value;
+                const src = parseInt(addSource.value) - 1;
+                const tgt = parseInt(addTarget.value) - 1;
+                const factorStr = addFactor.value;
+                let factor = parseFraction(factorStr);
+                if (!factor) factor = new Fraction(1,1);
+                if (type === 'row') {
+                    for (let c = 0; c < n; c++) {
+                        matrix[tgt][c] = matrix[tgt][c].add(matrix[src][c].mul(factor));
+                    }
+                    refreshUI();
+                    highlight([src, tgt], null);
+                } else {
+                    for (let r = 0; r < n; r++) {
+                        matrix[r][tgt] = matrix[r][tgt].add(matrix[r][src].mul(factor));
+                    }
+                    refreshUI();
+                    highlight(null, [src, tgt]);
+                }
+            });
+
+            stepBtn.addEventListener('click', () => {
+                stepDisplay.textContent = generateUpperTriangularSteps();
+            });
+
+            sizeInput.addEventListener('change', function() {
+                let v = parseInt(this.value);
+                if (v > 11) this.value = 11;
+                if (v < 1) this.value = 1;
+            });
+        }
+
+        // 启动
+        function start() {
+            n = 3;
+            sizeInput.value = 3;
+            initMatrix(true);
+            historyStack = [];
+            pushHistory();
+            refreshUI();
+            bindEvents();
+        }
+
+        start();
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>线性代数点灯游戏</title>
+    <style>
+        :root {
+            --bg-dark: #1a1a2e;
+            --bg-card: #16213e;
+            --primary-blue: #4cc9f0;
+            --primary-gold: #ffd166;
+            --accent-green: #06d6a0;
+            --accent-red: #ef476f;
+            --text-light: #f8f9fa;
+            --text-muted: #adb5bd;
+            --border-color: #2d4059;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(76, 201, 240, 0.3);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-title {
+            color: var(--primary-gold);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* 游戏区域样式 */
+        .lights-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .light-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .light-label {
+            font-weight: bold;
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+        }
+
+        .light {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #2d3746, #1c2331);
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 3px solid var(--border-color);
+        }
+
+        .light:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(76, 201, 240, 0.3);
+        }
+
+        .light.on {
+            background: linear-gradient(145deg, #ffea00, #ffb300);
+            box-shadow: 
+                inset 0 0 20px rgba(255, 255, 200, 0.8),
+                0 0 40px rgba(255, 209, 102, 0.8);
+        }
+
+        .light.highlight {
+            animation: highlight-pulse 3s ease;
+        }
+
+        @keyframes highlight-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 71, 111, 0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(239, 71, 111, 0); }
+        }
+
+        .light-bulb {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .light.on .light-bulb {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .state-vector {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .vector-title {
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+
+        .vector-display {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .vector-element {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--border-color);
+        }
+
+        .vector-element.zero {
+            color: var(--accent-red);
+        }
+
+        .vector-element.one {
+            color: var(--accent-green);
+            background-color: rgba(6, 214, 160, 0.1);
+        }
+
+        /* 矩阵展示区域样式 */
+        .matrix-container {
+            overflow-x: auto;
+        }
+
+        .matrix-title {
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+
+        .matrix {
+            border-collapse: collapse;
+            margin: 0 auto 20px;
+            font-size: 1.2rem;
+        }
+
+        .matrix td {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .matrix th {
+            padding: 8px;
+            color: var(--primary-gold);
+            font-weight: normal;
+        }
+
+        .equation {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-blue);
+            margin: 20px 0;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+
+        .equation .vector {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .equation .matrix {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        /* 控制按钮样式 */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: var(--bg-dark);
+        }
+
+        .btn-primary:hover {
+            background-color: #3ab0d9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: var(--primary-gold);
+            color: var(--bg-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e6bc5a;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 209, 102, 0.4);
+        }
+
+        .btn-danger {
+            background-color: var(--accent-red);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #d43c63;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(239, 71, 111, 0.4);
+        }
+
+        /* 解答模块样式 */
+        .solution-module {
+            margin-top: 40px;
+        }
+
+        .solution-content {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-muted);
+        }
+
+        .solution-vector {
+            margin: 20px 0;
+        }
+
+        .solution-steps {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .step-list {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .step-list li {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .game-area {
+                gap: 20px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .light {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .vector-element {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .matrix td {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .card-title {
+                font-size: 1.3rem;
+            }
+            
+            .light {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .vector-element {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>线性代数点灯游戏</h1>
+            <p class="subtitle">通过点击灯来改变灯的状态。目标是让所有灯都亮起。右侧区域展示了如何使用线性代数（模2运算）求解这个问题。</p>
+        </header>
+        
+        <main>
+            <div class="game-area">
+                <!-- 左侧游戏区域 -->
+                <div class="card">
+                    <div class="card-title">🎮 游戏区域</div>
+                    
+                    <div class="lights-container">
+                        <!-- 5盏灯 -->
+                        <div class="light-row">
+                            <div class="light-label">灯 1</div>
+                            <div class="light" data-index="0">
+                                <div class="light-bulb"></div>
+                            </div>
+                        </div>
+                        <div class="light-row">
+                            <div class="light-label">灯 2</div>
+                            <div class="light" data-index="1">
+                                <div class="light-bulb"></div>
+                            </div>
+                        </div>
+                        <div class="light-row">
+                            <div class="light-label">灯 3</div>
+                            <div class="light" data-index="2">
+                                <div class="light-bulb"></div>
+                            </div>
+                        </div>
+                        <div class="light-row">
+                            <div class="light-label">灯 4</div>
+                            <div class="light" data-index="3">
+                                <div class="light-bulb"></div>
+                            </div>
+                        </div>
+                        <div class="light-row">
+                            <div class="light-label">灯 5</div>
+                            <div class="light" data-index="4">
+                                <div class="light-bulb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="state-vector">
+                        <div class="vector-title">当前状态向量 s = [s₁, s₂, s₃, s₄, s₅]ᵀ</div>
+                        <div class="vector-display" id="state-vector">
+                            <!-- 通过JS动态生成 -->
+                        </div>
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="btn btn-primary" id="reset-btn">
+                            <span>🔄</span> 重置游戏
+                        </button>
+                        <button class="btn btn-secondary" id="random-btn">
+                            <span>🎲</span> 随机状态
+                        </button>
+                        <button class="btn btn-danger" id="solve-btn">
+                            <span>🔍</span> 求解
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 右侧线性代数展示区域 -->
+                <div class="card">
+                    <div class="card-title">📐 线性代数表示</div>
+                    
+                    <div class="matrix-container">
+                        <div class="matrix-title">影响矩阵 A (点击灯j会影响灯i)</div>
+                        <table class="matrix" id="matrix-a">
+                            <!-- 通过JS动态生成 -->
+                        </table>
+                        
+                        <div class="matrix-title">目标状态向量 t = [1,1,1,1,1]ᵀ</div>
+                        <div class="vector-display" id="target-vector">
+                            <!-- 通过JS动态生成 -->
+                        </div>
+                        
+                        <div class="equation">
+                            <div>矩阵方程: A·c = d</div>
+                            <div>其中 d = t - s (模2运算)</div>
+                            <div id="equation-details">
+                                <!-- 通过JS动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 解答模块 -->
+            <div class="card solution-module">
+                <div class="card-title">💡 解答模块</div>
+                <div class="solution-content" id="solution-content">
+                    <p>点击"求解"按钮查看解答...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 游戏状态
+        const gameState = {
+            lights: [0, 0, 0, 0, 0], // 0表示灭，1表示亮
+            matrixA: [], // 影响矩阵
+            targetVector: [1, 1, 1, 1, 1], // 目标向量
+            solution: null, // 当前解答
+            isSolving: false // 是否正在显示解答
+        };
+
+        // 初始化影响矩阵 (5x5的三对角矩阵)
+        function initMatrixA() {
+            const size = 5;
+            gameState.matrixA = [];
+            
+            for (let i = 0; i < size; i++) {
+                gameState.matrixA[i] = [];
+                for (let j = 0; j < size; j++) {
+                    // 对角线及相邻位置为1，其余为0
+                    if (i === j || i === j-1 || i === j+1) {
+                        gameState.matrixA[i][j] = 1;
+                    } else {
+                        gameState.matrixA[i][j] = 0;
+                    }
+                }
+            }
+        }
+
+        // 初始化游戏
+        function initGame() {
+            initMatrixA();
+            renderGame();
+            renderMatrixA();
+            renderTargetVector();
+            updateEquation();
+            clearSolution();
+        }
+
+        // 渲染游戏区域
+        function renderGame() {
+            const lights = document.querySelectorAll('.light');
+            lights.forEach((light, index) => {
+                // 更新灯的状态
+                if (gameState.lights[index] === 1) {
+                    light.classList.add('on');
+                } else {
+                    light.classList.remove('on');
+                }
+                
+                // 移除高亮效果
+                light.classList.remove('highlight');
+                
+                // 添加点击事件
+                light.onclick = () => toggleLight(index);
+            });
+            
+            // 渲染状态向量
+            renderStateVector();
+            
+            // 更新方程
+            updateEquation();
+            
+            // 如果正在显示解答，则清除
+            if (gameState.isSolving) {
+                clearSolution();
+            }
+        }
+
+        // 渲染状态向量
+        function renderStateVector() {
+            const container = document.getElementById('state-vector');
+            container.innerHTML = '';
+            
+            gameState.lights.forEach((state, index) => {
+                const element = document.createElement('div');
+                element.className = `vector-element ${state === 0 ? 'zero' : 'one'}`;
+                element.textContent = state;
+                element.title = `s${index+1} = ${state}`;
+                container.appendChild(element);
+            });
+        }
+
+        // 渲染影响矩阵
+        function renderMatrixA() {
+            const table = document.getElementById('matrix-a');
+            table.innerHTML = '';
+            
+            // 创建表头
+            const thead = document.createElement('thead');
+            let headerRow = document.createElement('tr');
+            
+            // 添加空白表头单元格
+            headerRow.appendChild(document.createElement('th'));
+            
+            // 添加列标签
+            for (let j = 0; j < 5; j++) {
+                const th = document.createElement('th');
+                th.textContent = `灯${j+1}`;
+                headerRow.appendChild(th);
+            }
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            
+            // 创建表格主体
+            const tbody = document.createElement('tbody');
+            for (let i = 0; i < 5; i++) {
+                const row = document.createElement('tr');
+                
+                // 添加行标签
+                const rowHeader = document.createElement('th');
+                rowHeader.textContent = `灯${i+1}`;
+                row.appendChild(rowHeader);
+                
+                // 添加矩阵元素
+                for (let j = 0; j < 5; j++) {
+                    const cell = document.createElement('td');
+                    cell.textContent = gameState.matrixA[i][j];
+                    row.appendChild(cell);
+                }
+                tbody.appendChild(row);
+            }
+            table.appendChild(tbody);
+        }
+
+        // 渲染目标向量
+        function renderTargetVector() {
+            const container = document.getElementById('target-vector');
+            container.innerHTML = '';
+            
+            gameState.targetVector.forEach((state, index) => {
+                const element = document.createElement('div');
+                element.className = 'vector-element one';
+                element.textContent = state;
+                element.title = `t${index+1} = ${state}`;
+                container.appendChild(element);
+            });
+        }
+
+        // 更新方程
+        function updateEquation() {
+            const container = document.getElementById('equation-details');
+            
+            // 计算差值向量 d = t - s (模2运算，即异或)
+            const d = gameState.targetVector.map((t, i) => t ^ gameState.lights[i]);
+            
+            // 创建方程的可视化表示
+            let html = `
+                <div style="margin-top: 10px;">
+                    <table class="matrix" style="display: inline-block; vertical-align: middle;">
+                        <tr>
+            `;
+            
+            // 显示矩阵A
+            for (let j = 0; j < 5; j++) {
+                html += `<td>${gameState.matrixA[0][j]}</td>`;
+            }
+            
+            html += `
+                        </tr>
+                        <tr>
+            `;
+            
+            for (let j = 0; j < 5; j++) {
+                html += `<td>${gameState.matrixA[1][j]}</td>`;
+            }
+            
+            html += `
+                        </tr>
+                        <tr>
+            `;
+            
+            for (let j = 0; j < 5; j++) {
+                html += `<td>${gameState.matrixA[2][j]}</td>`;
+            }
+            
+            html += `
+                        </tr>
+                        <tr>
+            `;
+            
+            for (let j = 0; j < 5; j++) {
+                html += `<td>${gameState.matrixA[3][j]}</td>`;
+            }
+            
+            html += `
+                        </tr>
+                        <tr>
+            `;
+            
+            for (let j = 0; j < 5; j++) {
+                html += `<td>${gameState.matrixA[4][j]}</td>`;
+            }
+            
+            html += `
+                        </tr>
+                    </table>
+                    
+                    <span style="margin: 0 10px; font-size: 1.5rem;">·</span>
+                    
+                    <div class="vector" style="display: inline-block; vertical-align: middle;">
+                        <div style="margin-bottom: 5px;">c₁</div>
+                        <div style="margin-bottom: 5px;">c₂</div>
+                        <div style="margin-bottom: 5px;">c₃</div>
+                        <div style="margin-bottom: 5px;">c₄</div>
+                        <div>c₅</div>
+                    </div>
+                    
+                    <span style="margin: 0 10px; font-size: 1.5rem;">=</span>
+                    
+                    <div class="vector" style="display: inline-block; vertical-align: middle;">
+            `;
+            
+            // 显示向量d
+            d.forEach((value, index) => {
+                html += `<div style="margin-bottom: 5px; color: ${value === 1 ? 'var(--accent-green)' : 'var(--accent-red)'}">${value}</div>`;
+            });
+            
+            html += `
+                    </div>
+                    
+                    <div style="margin-top: 10px; font-size: 0.9rem; color: var(--text-muted)">
+                        其中 d = [${d.join(', ')}]ᵀ, dᵢ = tᵢ - sᵢ (模2)
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        // 切换灯的状态
+        function toggleLight(index) {
+            // 切换自身
+            gameState.lights[index] ^= 1;
+            
+            // 切换上一盏灯（如果存在）
+            if (index > 0) {
+                gameState.lights[index - 1] ^= 1;
+            }
+            
+            // 切换下一盏灯（如果存在）
+            if (index < 4) {
+                gameState.lights[index + 1] ^= 1;
+            }
+            
+            renderGame();
+        }
+
+        // 重置游戏
+        function resetGame() {
+            gameState.lights = [0, 0, 0, 0, 0];
+            gameState.solution = null;
+            renderGame();
+            clearSolution();
+        }
+
+        // 生成随机有解状态
+        function randomState() {
+            // 随机生成一个点击向量
+            const clickVector = Array.from({length: 5}, () => Math.floor(Math.random() * 2));
+            
+            // 从全灭状态开始，应用随机点击向量
+            gameState.lights = [0, 0, 0, 0, 0];
+            
+            clickVector.forEach((click, index) => {
+                if (click === 1) {
+                    toggleLight(index);
+                }
+            });
+            
+            renderGame();
+        }
+
+        // 高斯消元法求解模2线性方程组
+        function gaussianEliminationMod2(A, b) {
+            const n = A.length;
+            const augmented = A.map((row, i) => [...row, b[i]]);
+            
+            // 前向消元
+            for (let i = 0; i < n; i++) {
+                // 寻找主元
+                let pivot = i;
+                while (pivot < n && augmented[pivot][i] === 0) {
+                    pivot++;
+                }
+                
+                // 如果找不到主元，继续下一列
+                if (pivot === n) {
+                    continue;
+                }
+                
+                // 交换行
+                if (pivot !== i) {
+                    [augmented[i], augmented[pivot]] = [augmented[pivot], augmented[i]];
+                }
+                
+                // 消元
+                for (let j = i + 1; j < n; j++) {
+                    if (augmented[j][i] === 1) {
+                        for (let k = i; k <= n; k++) {
+                            augmented[j][k] ^= augmented[i][k];
+                        }
+                    }
+                }
+            }
+            
+            // 回代求解
+            const x = new Array(n).fill(0);
+            for (let i = n - 1; i >= 0; i--) {
+                // 检查是否有解
+                if (augmented[i][i] === 0) {
+                    // 如果增广矩阵的该行除了最后一列都是0，但最后一列不为0，则无解
+                    if (augmented[i][n] === 1) {
+                        return null; // 无解
+                    }
+                    continue;
+                }
+                
+                x[i] = augmented[i][n];
+                for (let j = i + 1; j < n; j++) {
+                    x[i] ^= augmented[i][j] & x[j];
+                }
+            }
+            
+            return x;
+        }
+
+        // 求解游戏
+        function solveGame() {
+            // 计算差值向量 d = t - s (模2运算，即异或)
+            const d = gameState.targetVector.map((t, i) => t ^ gameState.lights[i]);
+            
+            // 使用高斯消元法求解 A·c = d
+            const solution = gaussianEliminationMod2(gameState.matrixA, d);
+            
+            if (solution === null) {
+                showSolution(null);
+                return;
+            }
+            
+            gameState.solution = solution;
+            showSolution(solution);
+            
+            // 高亮需要点击的灯
+            highlightSolutionLights(solution);
+        }
+
+        // 显示解答
+        function showSolution(solution) {
+            const container = document.getElementById('solution-content');
+            
+            if (solution === null) {
+                container.innerHTML = `
+                    <p style="color: var(--accent-red); font-weight: bold;">⚠️ 当前状态无解！</p>
+                    <p>请尝试重置游戏或生成随机状态。</p>
+                `;
+                return;
+            }
+            
+            // 创建解答向量显示
+            let solutionHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="color: var(--primary-blue); margin-bottom: 10px; font-weight: bold;">答案向量 c = [c₁, c₂, c₃, c₄, c₅]ᵀ</div>
+                    <div class="vector-display" style="justify-content: center;">
+            `;
+            
+            solution.forEach((value, index) => {
+                solutionHTML += `
+                    <div class="vector-element ${value === 0 ? 'zero' : 'one'}" 
+                         style="${value === 1 ? 'background-color: rgba(6, 214, 160, 0.2);' : ''}">
+                        ${value}
+                    </div>
+                `;
+            });
+            
+            solutionHTML += `
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.9rem; color: var(--text-muted)">
+                        cᵢ = 1 表示需要点击灯${solution.indexOf(1) > -1 ? '' : ' (无需要点击的灯)'}
+                    </div>
+                </div>
+            `;
+            
+            // 创建点击方案列表
+            let stepsHTML = `<div class="solution-steps"><div style="color: var(--primary-blue); margin-bottom: 10px; font-weight: bold;">点击方案:</div><ul class="step-list">`;
+            
+            const hasSolution = solution.some(v => v === 1);
+            
+            if (!hasSolution) {
+                stepsHTML += `<li>当前已经是目标状态，无需点击任何灯</li>`;
+            } else {
+                solution.forEach((value, index) => {
+                    if (value === 1) {
+                        stepsHTML += `<li>点击 <strong>灯${index+1}</strong></li>`;
+                    }
+                });
+            }
+            
+            stepsHTML += `</ul></div>`;
+            
+            container.innerHTML = solutionHTML + stepsHTML;
+            gameState.isSolving = true;
+        }
+
+        // 高亮需要点击的灯
+        function highlightSolutionLights(solution) {
+            if (!solution) return;
+            
+            const lights = document.querySelectorAll('.light');
+            lights.forEach((light, index) => {
+                if (solution[index] === 1) {
+                    light.classList.add('highlight');
+                }
+            });
+            
+            // 3秒后移除高亮
+            setTimeout(() => {
+                lights.forEach(light => {
+                    light.classList.remove('highlight');
+                });
+            }, 3000);
+        }
+
+        // 清除解答
+        function clearSolution() {
+            const container = document.getElementById('solution-content');
+            container.innerHTML = `<p>点击"求解"按钮查看解答...</p>`;
+            gameState.isSolving = false;
+            gameState.solution = null;
+        }
+
+        // 初始化事件监听器
+        function initEventListeners() {
+            document.getElementById('reset-btn').addEventListener('click', resetGame);
+            document.getElementById('random-btn').addEventListener('click', randomState);
+            document.getElementById('solve-btn').addEventListener('click', solveGame);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initGame();
+            initEventListeners();
+        });
+    </script>
+</body>
+</html>
