@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>补充习题完整解答</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script">
+    </script>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: #f8f9fa;
+            color: #1e1e1e;
+            padding: 2rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            color: #1a5276;
+            border-left: 6px solid #1a5276;
+            padding-left: 1rem;
+        }
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 1.8rem;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        h4 {
+            font-size: 1.2rem;
+            margin-top: 1.2rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        .exercise-block {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            border: 1px solid #e0e0e0;
+        }
+        .question {
+            font-weight: 600;
+            color: #0d3b66;
+            margin-top: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        .answer {
+            margin-top: 0.2rem;
+            padding-left: 1.2rem;
+            border-left: 3px solid #3498db;
+        }
+        .formula-box {
+            background: #f7f9fc;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            margin: 0.8rem 0;
+            overflow-x: auto;
+        }
+        .boxed {
+            background: #eaf2f8;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 0.2rem 0;
+        }
+        hr {
+            border: none;
+            border-top: 1px dashed #ccc;
+            margin: 2.5rem 0;
+        }
+        .footnote {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 1.5rem;
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .exercise-block { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>📘 补充习题 · 完整解答</h1>
+
+<!-- ============================================================ -->
+<!-- 习题 1：线性变换与矩阵运算 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 1 &nbsp; 线性变换与矩阵运算</h2>
+    <div class="exercise-block">
+
+        <h3>第 (1) 小题</h3>
+        <div class="answer">
+            <p>对角矩阵的乘法：</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix} a_1 & 0 \\ 0 & a_2 \end{pmatrix}
+                \begin{pmatrix} b_1 & 0 \\ 0 & b_2 \end{pmatrix}
+                =
+                \begin{pmatrix} a_1 b_1 & 0 \\ 0 & a_2 b_2 \end{pmatrix}.
+                \]
+            </div>
+            <p>幂次：</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix} a & 0 \\ 0 & b \end{pmatrix}^n
+                =
+                \begin{pmatrix} a^n & 0 \\ 0 & b^n \end{pmatrix},
+                \quad n\ge 0.
+                \]
+            </div>
+            <p>逆（当 \(a,b\neq 0\)）：</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix} a & 0 \\ 0 & b \end{pmatrix}^{-1}
+                =
+                \begin{pmatrix} 1/a & 0 \\ 0 & 1/b \end{pmatrix}.
+                \]
+            </div>
+            <p><strong>几何直观：</strong> 对角矩阵表示沿坐标轴的伸缩变换，其乘积对应伸缩因子的相乘，幂次对应重复伸缩，逆对应反向伸缩。</p>
+        </div>
+
+        <h3>第 (2) 小题</h3>
+        <div class="answer">
+            <p>旋转矩阵的乘积（角度相加）：</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix}
+                \cos\theta & -\sin\theta \\
+                \sin\theta & \cos\theta
+                \end{pmatrix}
+                \begin{pmatrix}
+                \cos\varphi & -\sin\varphi \\
+                \sin\varphi & \cos\varphi
+                \end{pmatrix}
+                =
+                \begin{pmatrix}
+                \cos(\theta+\varphi) & -\sin(\theta+\varphi) \\
+                \sin(\theta+\varphi) & \cos(\theta+\varphi)
+                \end{pmatrix}.
+                \]
+            </div>
+            <p>幂次：</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix}
+                \cos\theta & -\sin\theta \\
+                \sin\theta & \cos\theta
+                \end{pmatrix}^n
+                =
+                \begin{pmatrix}
+                \cos(n\theta) & -\sin(n\theta) \\
+                \sin(n\theta) & \cos(n\theta)
+                \end{pmatrix}.
+                \]
+            </div>
+            <p>逆（旋转 \(-\theta\)）：</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix}
+                \cos\theta & -\sin\theta \\
+                \sin\theta & \cos\theta
+                \end{pmatrix}^{-1}
+                =
+                \begin{pmatrix}
+                \cos\theta & \sin\theta \\
+                -\sin\theta & \cos\theta
+                \end{pmatrix}.
+                \]
+            </div>
+            <p><strong>几何直观：</strong> 旋转矩阵对应平面上的旋转变换，乘积等价于旋转角度的相加，幂次对应多次旋转，逆对应反向旋转。</p>
+        </div>
+
+        <h3>第 (3) 小题</h3>
+        <div class="answer">
+            <p>剪切矩阵（初等矩阵）的乘法：</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix} 1 & a \\ 0 & 1 \end{pmatrix}
+                \begin{pmatrix} 1 & b \\ 0 & 1 \end{pmatrix}
+                =
+                \begin{pmatrix} 1 & a+b \\ 0 & 1 \end{pmatrix}.
+                \]
+            </div>
+            <p>幂次：</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix} 1 & a \\ 0 & 1 \end{pmatrix}^n
+                =
+                \begin{pmatrix} 1 & n a \\ 0 & 1 \end{pmatrix}.
+                \]
+            </div>
+            <p>逆：</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix} 1 & a \\ 0 & 1 \end{pmatrix}^{-1}
+                =
+                \begin{pmatrix} 1 & -a \\ 0 & 1 \end{pmatrix}.
+                \]
+            </div>
+            <p><strong>几何直观：</strong> 该矩阵表示沿 \(x\) 方向的剪切，叠加剪切时位移量相加，多次剪切为线性增长，逆剪切为反向位移。</p>
+        </div>
+
+        <h3>第 (4) 小题</h3>
+        <div class="answer">
+            <p>投射到 \(x=0\)（\(y\) 轴）的矩阵：</p>
+            <div class="formula-box">
+                \[
+                P_{x=0} = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}.
+                \]
+            </div>
+            <p>投射到 \(y=0\)（\(x\) 轴）的矩阵：</p>
+            <div class="formula-box">
+                \[
+                P_{y=0} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}.
+                \]
+            </div>
+            <p>投射到直线 \(y=x\) 的矩阵：</p>
+            <div class="formula-box">
+                \[
+                P_{y=x} = \begin{pmatrix} 1/2 & 1/2 \\ 1/2 & 1/2 \end{pmatrix}.
+                \]
+            </div>
+            <p>验证平方等于自身（以 \(P_{y=x}\) 为例）：</p>
+            <div class="formula-box">
+                \[
+                P_{y=x}^2 = 
+                \begin{pmatrix} 1/2 & 1/2 \\ 1/2 & 1/2 \end{pmatrix}^2
+                =
+                \begin{pmatrix} 1/2 & 1/2 \\ 1/2 & 1/2 \end{pmatrix}
+                = P_{y=x}.
+                \]
+            </div>
+            <p>投射到直线 \(y=kx\) 的矩阵为</p>
+            <div class="formula-box">
+                \[
+                P_{y=kx} = \frac{1}{1+k^2}
+                \begin{pmatrix} 1 & k \\ k & k^2 \end{pmatrix}.
+                \]
+            </div>
+            <p>同样满足 \(P^2=P\)。</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- 习题 2：特定矩阵的计算规律 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 2 &nbsp; 特定矩阵的计算规律</h2>
+    <div class="exercise-block">
+        <div class="answer">
+            <p>设矩阵 \(A\) 的每一行都是第一行的倍数，则可写作</p>
+            <div class="formula-box">
+                \[
+                A = \begin{pmatrix} 1 \\ c_2 \\ \vdots \\ c_n \end{pmatrix}
+                \begin{pmatrix} a_1 & a_2 & \cdots & a_n \end{pmatrix}
+                = \mathbf{u} \mathbf{v}^T,
+                \]
+            </div>
+            <p>其中 \(\mathbf{u} = (1, c_2, \dots, c_n)^T\)，\(\mathbf{v} = (a_1, a_2, \dots, a_n)^T\)。</p>
+            <p>则</p>
+            <div class="formula-box">
+                \[
+                A^2 = (\mathbf{u}\mathbf{v}^T)(\mathbf{u}\mathbf{v}^T)
+                = \mathbf{u}(\mathbf{v}^T\mathbf{u})\mathbf{v}^T
+                = (\mathbf{v}^T\mathbf{u}) A.
+                \]
+            </div>
+            <p>而 \(\mathbf{v}^T\mathbf{u} = \sum_{i=1}^n a_i c_i\)，这正好是 \(A\) 的迹（对角元之和）。记 \(t = \operatorname{tr}(A)\)，则</p>
+            <div class="formula-box">
+                \[
+                A^k = t^{k-1} A, \quad k\ge 1.
+                \]
+            </div>
+            <p>对于给定的例子</p>
+            <div class="formula-box">
+                \[
+                A = \begin{pmatrix} 1 & 2 & 3 \\ 2 & 4 & 6 \\ 3 & 6 & 9 \end{pmatrix}
+                = \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}
+                \begin{pmatrix} 1 & 2 & 3 \end{pmatrix},
+                \]
+            </div>
+            <p>迹 \(t = 1+4+9 = 14\)，所以</p>
+            <div class="formula-box">
+                \[
+                A^k = 14^{k-1} A.
+                \]
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- 习题 3：李括号 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 3 &nbsp; 李括号（Lie bracket）</h2>
+    <div class="exercise-block">
+        <div class="answer">
+            <p>定义 \([A,B]=AB-BA\)，要证明 Jacobi 恒等式：</p>
+            <div class="formula-box">
+                \[
+                [A,[B,C]] + [B,[C,A]] + [C,[A,B]] = 0.
+                \]
+            </div>
+            <p>直接展开第一项：</p>
+            <div class="formula-box">
+                \[
+                [A,[B,C]] = A(BC-CB) - (BC-CB)A
+                = ABC - ACB - BCA + CBA.
+                \]
+            </div>
+            <p>第二项：</p>
+            <div class="formula-box">
+                \[
+                [B,[C,A]] = B(CA-AC) - (CA-AC)B
+                = BCA - BAC - CAB + ACB.
+                \]
+            </div>
+            <p>第三项：</p>
+            <div class="formula-box">
+                \[
+                [C,[A,B]] = C(AB-BA) - (AB-BA)C
+                = CAB - CBA - ABC + BAC.
+                \]
+            </div>
+            <p>将三项相加，所有项抵消，和为 \(0\)。故恒等式成立。</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- 习题 4：数量矩阵的特性 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 4 &nbsp; 数量矩阵的特性</h2>
+    <div class="exercise-block">
+
+        <h3>第 (1) 小题</h3>
+        <div class="answer">
+            <p>对于任意矩阵 \(A\)，\( (\lambda E)A = \lambda A = A(\lambda E)\)，故 \(\lambda E\) 与所有矩阵可交换，所以 \(S\subseteq T\)。</p>
+        </div>
+
+        <h3>第 (2) 小题</h3>
+        <div class="answer">
+            <p>定义 \(E_{ij}\) 为仅在 \((i,j)\) 处为 \(1\)，其余为 \(0\) 的矩阵。则</p>
+            <div class="formula-box">
+                \[
+                A = \sum_{i=1}^n \sum_{j=1}^n a_{ij} E_{ij}.
+                \]
+            </div>
+        </div>
+
+        <h3>第 (3) 小题</h3>
+        <div class="answer">
+            <p>计算 \(B E_{ij}\)：结果矩阵的第 \(j\) 列为 \(B\) 的第 \(i\) 列，其余列为 \(0\)。即</p>
+            <div class="formula-box">
+                \[
+                (B E_{ij})_{k,l} = \delta_{j l} \, b_{k i}.
+                \]
+            </div>
+            <p>类似地，\(E_{ij} B\) 的第 \(i\) 行为 \(B\) 的第 \(j\) 行，其余行为 \(0\)：</p>
+            <div class="formula-box">
+                \[
+                (E_{ij} B)_{k,l} = \delta_{i k} \, b_{j l}.
+                \]
+            </div>
+        </div>
+
+        <h3>第 (4) 小题</h3>
+        <div class="answer">
+            <p>设 \(X = (x_{ij})\) 满足对所有 \(E_{ij}\)，\(X E_{ij} = E_{ij} X\)。取 \(i\ne j\)，比较 \((i,j)\) 位置可得 \(x_{ii} = x_{jj}\)，且非对角元 \(x_{ij}=0\)。故 \(X\) 为数量矩阵 \(\lambda E\)。</p>
+        </div>
+
+        <h3>第 (5) 小题</h3>
+        <div class="answer">
+            <p>若 \(X\) 与所有矩阵可交换，则特别与所有 \(E_{ij}\) 可交换，由第 (4) 问可知 \(X\) 是数量矩阵。故 \(T\subseteq S\)，结合 \(S\subseteq T\)，得 \(S=T\)。</p>
+        </div>
+
+        <h3>第 (6) 小题</h3>
+        <div class="answer">
+            <p>非数量对角矩阵如 \(\begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix}\)，它与 \(E_{12}\) 不可交换，因为</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix} E_{12}
+                = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \quad
+                E_{12} \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix}
+                = \begin{pmatrix} 0 & 2 \\ 0 & 0 \end{pmatrix}.
+                \]
+            </div>
+            <p>两者不等。</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- 习题 5：可换矩阵的二项式定理 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 5 &nbsp; 可换矩阵的二项式定理及其应用</h2>
+    <div class="exercise-block">
+
+        <h3>第 (1) 小题</h3>
+        <div class="answer">
+            <p>若 \(AB=BA\)，则二项式定理成立：</p>
+            <div class="formula-box">
+                \[
+                (A+B)^k = \sum_{\ell=0}^k \binom{k}{\ell} A^{k-\ell} B^\ell.
+                \]
+            </div>
+            <p>（注意题中公式有笔误，此处给出正确形式。）</p>
+        </div>
+
+        <h3>第 (2) 小题</h3>
+        <div class="answer">
+            <p>令 \(A = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}\)，\(B = I\)，则 \(A\) 和 \(B\) 可换，且 \(A^2=0\)。则</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix} 1 & a \\ 0 & 1 \end{pmatrix} = I + a A.
+                \]
+            </div>
+            <p>由二项式定理：</p>
+            <div class="formula-box">
+                \[
+                (I + a A)^k = \sum_{\ell=0}^k \binom{k}{\ell} (a A)^\ell
+                = I + k a A = \begin{pmatrix} 1 & k a \\ 0 & 1 \end{pmatrix}.
+                \]
+            </div>
+            <p>与之前结果一致。</p>
+        </div>
+
+        <h3>第 (3) 小题</h3>
+        <div class="answer">
+            <p>矩阵 \(\begin{pmatrix} \lambda & 1 \\ 0 & \lambda \end{pmatrix} = \lambda I + N\)，其中 \(N = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}\)，\(N^2=0\)，且 \(\lambda I\) 与 \(N\) 可换。于是</p>
+            <div class="formula-box">
+                \[
+                (\lambda I + N)^k = \sum_{\ell=0}^k \binom{k}{\ell} (\lambda I)^{k-\ell} N^\ell
+                = \lambda^k I + k \lambda^{k-1} N
+                = \begin{pmatrix} \lambda^k & k \lambda^{k-1} \\ 0 & \lambda^k \end{pmatrix}.
+                \]
+            </div>
+        </div>
+
+        <h3>第 (4) 小题</h3>
+        <div class="answer">
+            <p>设 \(J_n(\lambda)\) 为 \(n\) 阶若尔当块：</p>
+            <div class="formula-box">
+                \[
+                J_n(\lambda) = \lambda I + N_n,
+                \]
+            </div>
+            <p>其中 \(N_n\) 为上移位矩阵（次对角线为 \(1\)），满足 \(N_n^n=0\)。因此</p>
+            <div class="formula-box">
+                \[
+                J_n(\lambda)^k = \sum_{\ell=0}^{\min(k,n-1)} \binom{k}{\ell} \lambda^{k-\ell} N_n^\ell.
+                \]
+            </div>
+            <p>具体地，\((J_n(\lambda)^k)_{i,j} = \binom{k}{j-i} \lambda^{k-(j-i)}\) 当 \(0\le j-i \le \min(k,n-1)\)，否则为 \(0\)。</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- 习题 6：对称矩阵和反对称矩阵 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 6 &nbsp; 对称矩阵和反对称矩阵</h2>
+    <div class="exercise-block">
+
+        <h3>第 (1) 小题</h3>
+        <div class="answer">
+            <p>\((A+A^T)^T = A^T + A = A+A^T\)，故对称；\((A-A^T)^T = A^T - A = -(A-A^T)\)，故反对称。</p>
+        </div>
+
+        <h3>第 (2) 小题</h3>
+        <div class="answer">
+            <p>任意方阵 \(A\) 可分解为</p>
+            <div class="formula-box">
+                \[
+                A = \frac{A+A^T}{2} + \frac{A-A^T}{2},
+                \]
+            </div>
+            <p>其中第一项对称，第二项反对称。唯一性：若 \(A = S_1 + K_1 = S_2 + K_2\)，则 \(S_1-S_2 = K_2-K_1\)，左边对称，右边反对称，只能为零矩阵。</p>
+        </div>
+
+        <h3>第 (3) 小题</h3>
+        <div class="answer">
+            <p>对给定矩阵 \(A = \begin{pmatrix} 1 & 2 & 3 \\ 5 & 6 & 7 \\ 4 & 9 & 10 \end{pmatrix}\)，</p>
+            <div class="formula-box">
+                \[
+                A^T = \begin{pmatrix} 1 & 5 & 4 \\ 2 & 6 & 9 \\ 3 & 7 & 10 \end{pmatrix}.
+                \]
+            </div>
+            <p>对称部分：</p>
+            <div class="formula-box">
+                \[
+                \frac{A+A^T}{2} =
+                \begin{pmatrix}
+                1 & 3.5 & 3.5 \\
+                3.5 & 6 & 8 \\
+                3.5 & 8 & 10
+                \end{pmatrix}.
+                \]
+            </div>
+            <p>反对称部分：</p>
+            <div class="formula-box">
+                \[
+                \frac{A-A^T}{2} =
+                \begin{pmatrix}
+                0 & -1.5 & -0.5 \\
+                1.5 & 0 & -1 \\
+                0.5 & 1 & 0
+                \end{pmatrix}.
+                \]
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- 习题 7：伴随矩阵相关 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 7 &nbsp; 伴随矩阵相关</h2>
+    <div class="exercise-block">
+
+        <h3>第 (1) 小题</h3>
+        <div class="answer">
+            <p>由 \(AA^* = \det(A)E\)，取行列式得</p>
+            <div class="formula-box">
+                \[
+                \det(A)\det(A^*) = \det(A)^n.
+                \]
+            </div>
+            <p>若 \(\det(A)\neq 0\)，则 \(\det(A^*) = \det(A)^{n-1}\)。若 \(\det(A)=0\)，则 \(\det(A^*)=0\)（可从秩的角度证明）。因此统一有</p>
+            <div class="formula-box">
+                \[
+                \det(A^*) = \det(A)^{n-1}.
+                \]
+            </div>
+        </div>
+
+        <h3>第 (2) 小题</h3>
+        <div class="answer">
+            <p>若 \(A\) 可逆，则 \(A^* = \det(A) A^{-1}\)，显然可逆，且</p>
+            <div class="formula-box">
+                \[
+                (A^*)^{-1} = \frac{1}{\det(A)} A.
+                \]
+            </div>
+        </div>
+
+        <h3>第 (3) 小题</h3>
+        <div class="answer">
+            <p>计算 \((A^{-1})^* = \det(A^{-1}) (A^{-1})^{-1} = \frac{1}{\det(A)} A\)，与 \((A^*)^{-1}\) 相同，故</p>
+            <div class="formula-box">
+                \[
+                (A^*)^{-1} = (A^{-1})^*.
+                \]
+            </div>
+        </div>
+
+        <h3>第 (4) 小题 —— 伴随与运算的关系</h3>
+        <div class="answer">
+            <ul>
+                <li><strong>数乘：</strong> \((\lambda A)^* = \lambda^{n-1} A^*\)（因为每个代数余子式都乘以 \(\lambda^{n-1}\)）。</li>
+                <li><strong>加法：</strong> 一般不成立。反例：取 \(A=E_{11}, B=E_{22}\)，则 \((A+B)^* = E\)（二阶时），但 \(A^*+B^* = 0+0=0\)，不等。</li>
+                <li><strong>乘法：</strong> 若 \(A,B\) 可逆，则
+                    <div class="formula-box">
+                        \[
+                        (AB)^* = \det(AB)(AB)^{-1} = \det(A)\det(B) B^{-1}A^{-1}
+                        = (\det(B)B^{-1})(\det(A)A^{-1}) = B^* A^*.
+                        \]
+                    </div>
+                </li>
+                <li><strong>转置：</strong> \((A^T)^* = (A^*)^T\)（由代数余子式的转置性质）。</li>
+                <li><strong>行列式：</strong> 已由第 (1) 小题给出。</li>
+            </ul>
+        </div>
+
+        <h3>第 (5) 小题 —— 伴随两次</h3>
+        <div class="answer">
+            <p>当 \(A\) 可逆时，</p>
+            <div class="formula-box">
+                \[
+                (A^*)^* = \det(A^*) (A^*)^{-1}
+                = \det(A)^{n-1} \cdot \frac{1}{\det(A)} A
+                = \det(A)^{n-2} A.
+                \]
+            </div>
+            <p>此公式对不可逆矩阵也成立（可用极限或秩论证）。</p>
+        </div>
+    </div>
+</section>
+
+<footer class="footnote">
+    <hr>
+    <p style="text-align: center; color: #666;">✅ 所有公式均使用 MathJax 渲染，支持响应式显示。</p>
+</footer>
+
+</body>
+</html>

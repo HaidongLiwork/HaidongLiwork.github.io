@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拓展习题解答：行列式的唯一性与三次方程求根</title>
+    <!-- 加载 MathJax 核心库，配置为 TeX-AMS_CHTML 全功能 -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script">
+    </script>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: #fafafa;
+            color: #1e1e1e;
+            padding: 2rem 3rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 0.3rem;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            font-size: 1.6rem;
+            margin-top: 2.2rem;
+            color: #1a5276;
+            border-left: 5px solid #1a5276;
+            padding-left: 1rem;
+        }
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 1.8rem;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        .exercise-block {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+        .question {
+            font-weight: 600;
+            color: #0d3b66;
+            margin-top: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        .answer {
+            margin-top: 0.2rem;
+            padding-left: 1.2rem;
+            border-left: 3px solid #3498db;
+        }
+        .formula-box {
+            background: #f7f9fc;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            margin: 0.8rem 0;
+            overflow-x: auto;
+        }
+        .boxed {
+            background: #eaf2f8;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 0.2rem 0;
+        }
+        hr {
+            border: none;
+            border-top: 1px dashed #ccc;
+            margin: 2rem 0;
+        }
+        .footnote {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 1rem;
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .exercise-block { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>📐 拓展习题完整解答</h1>
+
+<!-- ============================================================ -->
+<!-- 习题 1：行列式的唯一性 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 1 &nbsp; 行列式的唯一性</h2>
+    <div class="exercise-block">
+
+        <h3>第一小问</h3>
+        <div class="answer">
+            <p>设 \(A=(\alpha_1,\dots,\alpha_n)\)，且第 \(k\) 列为零向量，即 \(\alpha_k=0\)。</p>
+            <p>由列线性，取 \(\lambda=0\)，有</p>
+            <div class="formula-box">
+                \[
+                f(\alpha_1,\dots,0,\dots,\alpha_n)
+                =
+                f(\alpha_1,\dots,0\cdot \alpha_k,\dots,\alpha_n)
+                =
+                0\cdot f(\alpha_1,\dots,\alpha_k,\dots,\alpha_n)
+                =0.
+                \]
+            </div>
+            <p>所以若 \(A\) 有一列全为 \(0\)，则 \(f(A)=0\)。</p>
+        </div>
+
+        <h3>第二小问</h3>
+        <div class="answer">
+            <p>我们要证明：对任意 \(n\) 阶实矩阵 \(A\)，都有</p>
+            <div class="formula-box">
+                \[
+                f(A)=\det(A).
+                \]
+            </div>
+            <p>先证明 \(f\) 在初等列变换下的变化规律与行列式完全相同。</p>
+
+            <p><strong>1. 交换两列</strong><br>
+            设交换第 \(i\) 列和第 \(j\) 列。因为两列相同则 \(f=0\)，所以</p>
+            <div class="formula-box">
+                \[
+                0=f(\dots,\alpha_i+\alpha_j,\dots,\alpha_i+\alpha_j,\dots).
+                \]
+            </div>
+            <p>由列线性展开：</p>
+            <div class="formula-box">
+                \[
+                0=f(\dots,\alpha_i,\dots,\alpha_i,\dots)
+                +f(\dots,\alpha_i,\dots,\alpha_j,\dots)
+                +f(\dots,\alpha_j,\dots,\alpha_i,\dots)
+                +f(\dots,\alpha_j,\dots,\alpha_j,\dots).
+                \]
+            </div>
+            <p>其中第一项和第四项都为 \(0\)，因此</p>
+            <div class="formula-box">
+                \[
+                f(\dots,\alpha_i,\dots,\alpha_j,\dots)
+                +
+                f(\dots,\alpha_j,\dots,\alpha_i,\dots)=0.
+                \]
+            </div>
+            <p>所以交换两列时，\(f\) 变号。</p>
+
+            <p><strong>2. 某一列乘以常数</strong><br>
+            由列线性，若第 \(i\) 列乘以 \(c\)，则</p>
+            <div class="formula-box">
+                \[
+                f(\dots,c\alpha_i,\dots)=c f(\dots,\alpha_i,\dots).
+                \]
+            </div>
+
+            <p><strong>3. 某一列加上另一列的倍数</strong><br>
+            若第 \(i\) 列加上第 \(j\) 列的 \(c\) 倍，则</p>
+            <div class="formula-box">
+                \[
+                f(\dots,\alpha_i+c\alpha_j,\dots,\alpha_j,\dots)
+                =
+                f(\dots,\alpha_i,\dots,\alpha_j,\dots)
+                +
+                c f(\dots,\alpha_j,\dots,\alpha_j,\dots).
+                \]
+            </div>
+            <p>第二项中第 \(i\) 列和第 \(j\) 列都是 \(\alpha_j\)，所以为 \(0\)。因此</p>
+            <div class="formula-box">
+                \[
+                f(\dots,\alpha_i+c\alpha_j,\dots,\alpha_j,\dots)
+                =
+                f(\dots,\alpha_i,\dots,\alpha_j,\dots).
+                \]
+            </div>
+            <p>所以“倍加”不改变 \(f\) 的值。</p>
+
+            <p>因此，\(f\) 在初等列变换下的变化规律与行列式 \(\det\) 完全一致。</p>
+
+            <p>现在，任意矩阵 \(A\) 都可以通过一系列初等列变换化为对角矩阵</p>
+            <div class="formula-box">
+                \[
+                D=\operatorname{diag}(d_1,d_2,\dots,d_n).
+                \]
+            </div>
+            <p>设这些列变换的总乘积因子为 \(k\)，则</p>
+            <div class="formula-box">
+                \[
+                \det(D)=k\det(A),\qquad f(D)=kf(A).
+                \]
+            </div>
+            <p>另一方面，由列线性，</p>
+            <div class="formula-box">
+                \[
+                f(D)=f(d_1e_1,d_2e_2,\dots,d_ne_n)
+                =
+                d_1d_2\cdots d_n f(I).
+                \]
+            </div>
+            <p>又因为归一性 \(f(I)=1\)，所以</p>
+            <div class="formula-box">
+                \[
+                f(D)=d_1d_2\cdots d_n=\det(D).
+                \]
+            </div>
+            <p>于是</p>
+            <div class="formula-box">
+                \[
+                kf(A)=f(D)=\det(D)=k\det(A).
+                \]
+            </div>
+            <p>由于 \(k\neq 0\)，得到</p>
+            <div class="formula-box">
+                \[
+                f(A)=\det(A).
+                \]
+            </div>
+            <p>所以行列式函数 \(\det\) 与满足列线性、反对称性、归一性的函数 \(f\) 相同。</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- 习题 2：三次方程的求解 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 2 &nbsp; 三次方程的求根公式</h2>
+    <div class="exercise-block">
+
+        <h3>第一小问</h3>
+        <div class="answer">
+            <p>令</p>
+            <div class="formula-box">
+                \[
+                F(x)=x^3+ax^2+bx+c.
+                \]
+            </div>
+            <p>显然 \(F(x)\) 在 \(\mathbb R\) 上连续。并且</p>
+            <div class="formula-box">
+                \[
+                \lim_{x\to -\infty}F(x)=-\infty,\qquad 
+                \lim_{x\to +\infty}F(x)=+\infty.
+                \]
+            </div>
+            <p>所以存在 \(x_1<x_2\)，使得</p>
+            <div class="formula-box">
+                \[
+                F(x_1)<0<F(x_2).
+                \]
+            </div>
+            <p>由介值定理，存在 \(\alpha\in(x_1,x_2)\)，使得</p>
+            <div class="formula-box">
+                \[
+                F(\alpha)=0.
+                \]
+            </div>
+            <p>因此方程</p>
+            <div class="formula-box">
+                \[
+                x^3+ax^2+bx+c=0
+                \]
+            </div>
+            <p>总有实数根。</p>
+        </div>
+
+        <h3>第二小问：化为缺二次项的三次方程</h3>
+        <div class="answer">
+            <p>令</p>
+            <div class="formula-box">
+                \[
+                x=y-\frac{a}{3}.
+                \]
+            </div>
+            <p>代入原方程，计算得</p>
+            <div class="formula-box">
+                \[
+                x^3=\left(y-\frac a3\right)^3
+                =
+                y^3-ay^2+\frac{a^2}{3}y-\frac{a^3}{27},
+                \]
+                \[
+                ax^2=a\left(y^2-\frac{2a}{3}y+\frac{a^2}{9}\right)
+                =
+                ay^2-\frac{2a^2}{3}y+\frac{a^3}{9},
+                \]
+                \[
+                bx=by-\frac{ab}{3}.
+                \]
+            </div>
+            <p>相加后，\(y^2\) 项消去，得到</p>
+            <div class="formula-box">
+                \[
+                y^3+\left(b-\frac{a^2}{3}\right)y+
+                \left(\frac{2a^3}{27}-\frac{ab}{3}+c\right)=0.
+                \]
+            </div>
+            <p>所以</p>
+            <div class="formula-box">
+                \[
+                \boxed{p=b-\frac{a^2}{3}},\qquad
+                \boxed{q=\frac{2a^3}{27}-\frac{ab}{3}+c}.
+                \]
+            </div>
+            <p>方程化为</p>
+            <div class="formula-box">
+                \[
+                y^3+py+q=0.
+                \]
+            </div>
+        </div>
+
+        <h3>第三小问：增元降次</h3>
+        <div class="answer">
+            <p>设</p>
+            <div class="formula-box">
+                \[
+                y=u+v.
+                \]
+            </div>
+            <p>代入</p>
+            <div class="formula-box">
+                \[
+                y^3+py+q=0,
+                \]
+            </div>
+            <p>得到</p>
+            <div class="formula-box">
+                \[
+                u^3+v^3+(3uv+p)(u+v)+q=0.
+                \]
+            </div>
+            <p>取条件</p>
+            <div class="formula-box">
+                \[
+                3uv+p=0,\quad \text{即 } uv=-\frac p3.
+                \]
+            </div>
+            <p>此时</p>
+            <div class="formula-box">
+                \[
+                u^3+v^3=-q.
+                \]
+            </div>
+            <p>令</p>
+            <div class="formula-box">
+                \[
+                U=u^3,\qquad V=v^3.
+                \]
+            </div>
+            <p>则</p>
+            <div class="formula-box">
+                \[
+                U+V=-q,\qquad
+                UV=(uv)^3=\left(-\frac p3\right)^3=-\frac{p^3}{27}.
+                \]
+            </div>
+            <p>因此 \(U,V\) 是二次方程</p>
+            <div class="formula-box">
+                \[
+                t^2+qt-\frac{p^3}{27}=0.
+                \]
+            </div>
+            <p>的根。</p>
+        </div>
+
+        <h3>第四小问：解一个二次方程</h3>
+        <div class="answer">
+            <p>解</p>
+            <div class="formula-box">
+                \[
+                t^2+qt-\frac{p^3}{27}=0.
+                \]
+            </div>
+            <p>由求根公式，</p>
+            <div class="formula-box">
+                \[
+                t=-\frac q2\pm\sqrt{\frac{q^2}{4}+\frac{p^3}{27}}.
+                \]
+            </div>
+            <p>记</p>
+            <div class="formula-box">
+                \[
+                \Delta=\left(\frac q2\right)^2+\left(\frac p3\right)^3,
+                \]
+            </div>
+            <p>则</p>
+            <div class="formula-box">
+                \[
+                u^3,\ v^3
+                =
+                -\frac q2\pm\sqrt{\Delta}.
+                \]
+            </div>
+        </div>
+
+        <h3>第五小问：得到 \(y\) 的解</h3>
+        <div class="answer">
+            <p>设</p>
+            <div class="formula-box">
+                \[
+                \alpha=\sqrt[3]{-\frac q2+\sqrt{\Delta}},\qquad
+                \beta=\sqrt[3]{-\frac q2-\sqrt{\Delta}},
+                \]
+            </div>
+            <p>并且选取立方根使得</p>
+            <div class="formula-box">
+                \[
+                \alpha\beta=-\frac p3.
+                \]
+            </div>
+            <p>令</p>
+            <div class="formula-box">
+                \[
+                \omega=e^{2\pi i/3}=-\frac12+\frac{\sqrt3}{2}i.
+                \]
+            </div>
+            <p>则</p>
+            <div class="formula-box">
+                \[
+                \omega^3=1,\qquad 1+\omega+\omega^2=0.
+                \]
+            </div>
+            <p>可行的配对为</p>
+            <div class="formula-box">
+                \[
+                (u,v)=(\alpha,\beta),\quad
+                (u,v)=(\omega\alpha,\omega^2\beta),\quad
+                (u,v)=(\omega^2\alpha,\omega\beta).
+                \]
+            </div>
+            <p>因此三个根为</p>
+            <div class="formula-box">
+                \[
+                \boxed{
+                y_1=\alpha+\beta,
+                }
+                \]
+                \[
+                \boxed{
+                y_2=\omega\alpha+\omega^2\beta,
+                }
+                \]
+                \[
+                \boxed{
+                y_3=\omega^2\alpha+\omega\beta.
+                }
+                \]
+            </div>
+        </div>
+
+        <h3>第六小问：还原为原方程的根</h3>
+        <div class="answer">
+            <p>由第二小问，</p>
+            <div class="formula-box">
+                \[
+                x=y-\frac a3.
+                \]
+            </div>
+            <p>将第五小问中的 \(y_1,y_2,y_3\) 代入，并代入</p>
+            <div class="formula-box">
+                \[
+                p=b-\frac{a^2}{3},\qquad
+                q=\frac{2a^3}{27}-\frac{ab}{3}+c,
+                \]
+                \[
+                \Delta=\left(\frac q2\right)^2+\left(\frac p3\right)^3
+                =
+                \left(\frac q2\right)^2+
+                \left(\frac{b-\frac{a^2}{3}}{3}\right)^3,
+                \]
+            </div>
+            <p>得到原方程的三个根：</p>
+            <div class="formula-box">
+                \[
+                \boxed{
+                x_1=-\frac a3+
+                \sqrt[3]{-\frac q2+\sqrt{\Delta}}+
+                \sqrt[3]{-\frac q2-\sqrt{\Delta}}
+                }
+                \]
+                \[
+                \boxed{
+                x_2=-\frac a3+
+                \omega\sqrt[3]{-\frac q2+\sqrt{\Delta}}+
+                \omega^2\sqrt[3]{-\frac q2-\sqrt{\Delta}}
+                }
+                \]
+                \[
+                \boxed{
+                x_3=-\frac a3+
+                \omega^2\sqrt[3]{-\frac q2+\sqrt{\Delta}}+
+                \omega\sqrt[3]{-\frac q2-\sqrt{\Delta}}
+                }
+                \]
+            </div>
+            <p>其中</p>
+            <div class="formula-box">
+                \[
+                \boxed{
+                q=\frac{2a^3}{27}-\frac{ab}{3}+c,
+                }
+                \]
+                \[
+                \boxed{
+                \Delta=
+                \left(\frac q2\right)^2+
+                \left(\frac{b-\frac{a^2}{3}}{3}\right)^3,
+                }
+                \]
+            </div>
+            <p>并且立方根的选取满足</p>
+            <div class="formula-box">
+                \[
+                \boxed{
+                \sqrt[3]{-\frac q2+\sqrt{\Delta}}
+                \cdot
+                \sqrt[3]{-\frac q2-\sqrt{\Delta}}
+                =
+                -\frac{b-\frac{a^2}{3}}{3}.
+                }
+                \]
+            </div>
+            <p>这就是三次方程</p>
+            <div class="formula-box">
+                \[
+                x^3+ax^2+bx+c=0
+                \]
+            </div>
+            <p>的卡尔达诺（Cardano）求根公式。</p>
+        </div>
+    </div>
+</section>
+
+<footer class="footnote">
+    <hr>
+    <p style="text-align: center; color: #666;">📌 所有公式均使用 MathJax 渲染，支持响应式显示。</p>
+</footer>
+
+</body>
+</html>

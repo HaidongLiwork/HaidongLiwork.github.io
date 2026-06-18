@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拓展习题 · 多项式插值与纠错码</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script">
+    </script>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: #f8f9fa;
+            color: #1e1e1e;
+            padding: 2rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            color: #1a5276;
+            border-left: 6px solid #1a5276;
+            padding-left: 1rem;
+        }
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 1.8rem;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        .exercise-block {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            border: 1px solid #e0e0e0;
+        }
+        .answer {
+            margin-top: 0.2rem;
+            padding-left: 1.2rem;
+            border-left: 3px solid #3498db;
+        }
+        .formula-box {
+            background: #f7f9fc;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            margin: 0.8rem 0;
+            overflow-x: auto;
+        }
+        .boxed {
+            background: #eaf2f8;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 0.2rem 0;
+        }
+        hr {
+            border: none;
+            border-top: 1px dashed #ccc;
+            margin: 2.5rem 0;
+        }
+        .footnote {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 1.5rem;
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .exercise-block { padding: 1rem; }
+        }
+        .problem {
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<h1>📘 拓展习题 · 插值与纠错码</h1>
+
+<!-- ============================================================ -->
+<!-- 习题 1：多项式插值与Vandermonde矩阵 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 1 &nbsp; 多项式插值与 Vandermonde 矩阵</h2>
+    <div class="exercise-block">
+
+        <h3>第 (1) 小题</h3>
+        <div class="answer">
+            <p>设插值多项式为 \(f(t)=a_0+a_1 t+\cdots+a_{n-1}t^{n-1}\)。由经过点 \((t_i, y_i)\)，得方程组</p>
+            <div class="formula-box">
+                \[
+                \begin{cases}
+                a_0 + a_1 t_1 + \cdots + a_{n-1} t_1^{n-1} = y_1,\\
+                a_0 + a_1 t_2 + \cdots + a_{n-1} t_2^{n-1} = y_2,\\
+                \vdots\\
+                a_0 + a_1 t_n + \cdots + a_{n-1} t_n^{n-1} = y_n.
+                \end{cases}
+                \]
+            </div>
+            <p>其系数矩阵为 Vandermonde 矩阵</p>
+            <div class="formula-box">
+                \[
+                V = \begin{pmatrix}
+                1 & t_1 & t_1^2 & \cdots & t_1^{n-1} \\
+                1 & t_2 & t_2^2 & \cdots & t_2^{n-1} \\
+                \vdots & \vdots & \vdots & \ddots & \vdots \\
+                1 & t_n & t_n^2 & \cdots & t_n^{n-1}
+                \end{pmatrix}.
+                \]
+            </div>
+            <p>证明 \(V\) 可逆：考虑齐次方程组 \(V\mathbf{a}=0\)，即存在多项式 \(g(t)=\sum_{j=0}^{n-1} a_j t^j\) 使得 \(g(t_i)=0\) 对所有 \(i\) 成立。若 \(g\) 非零，则次数 \(\le n-1\) 的多项式有 \(n\) 个互异根，与代数基本定理矛盾。故 \(g\equiv 0\)，所有 \(a_j=0\)。因此 \(V\) 可逆，插值多项式存在唯一。</p>
+        </div>
+
+        <h3>第 (2) 小题 —— 超定情形</h3>
+        <div class="answer">
+            <p>若数据点个数 \(m>n\)，仍用次数 \(\le n-1\) 多项式拟合，增广矩阵为</p>
+            <div class="formula-box">
+                \[
+                [V' \mid \mathbf{y}] =
+                \begin{pmatrix}
+                1 & t_1 & \cdots & t_1^{n-1} & y_1 \\
+                1 & t_2 & \cdots & t_2^{n-1} & y_2 \\
+                \vdots & \vdots & \ddots & \vdots & \vdots \\
+                1 & t_m & \cdots & t_m^{n-1} & y_m
+                \end{pmatrix}.
+                \]
+            </div>
+            <p>有精确解当且仅当 \(\operatorname{rank}(V') = \operatorname{rank}([V' \mid \mathbf{y}])\)。这意味着所有 \(m\) 个点必须落在同一个次数 \(\le n-1\) 的多项式图象上，即存在 \(a_0,\dots,a_{n-1}\) 使得对每个点 \((t_i,y_i)\)，\(y_i = \sum_{j=0}^{n-1} a_j t_i^j\) 同时成立。等价地，向量 \(\mathbf{y}\) 必须属于 \(V'\) 的列空间。</p>
+        </div>
+
+        <h3>第 (3) 小题 —— 具体算例</h3>
+        <div class="answer">
+            <p>取 \(t_1=0, t_2=1, t_3=2\)，数据为 \((0,y_0),(1,y_1),(2,y_2)\)。则 Vandermonde 矩阵为</p>
+            <div class="formula-box">
+                \[
+                V = \begin{pmatrix}
+                1 & 0 & 0 \\
+                1 & 1 & 1 \\
+                1 & 2 & 4
+                \end{pmatrix}.
+                \]
+            </div>
+            <p>其逆矩阵为</p>
+            <div class="formula-box">
+                \[
+                V^{-1} = \begin{pmatrix}
+                1 & 0 & 0 \\
+                -3/2 & 2 & -1/2 \\
+                1/2 & -1 & 1/2
+                \end{pmatrix}.
+                \]
+            </div>
+            <p>系数向量 \(\mathbf{a} = V^{-1}(y_0,y_1,y_2)^T\)，故</p>
+            <div class="formula-box">
+                \[
+                a_0 = y_0,\quad
+                a_1 = -\frac{3}{2}y_0 + 2y_1 - \frac{1}{2}y_2,\quad
+                a_2 = \frac{1}{2}y_0 - y_1 + \frac{1}{2}y_2.
+                \]
+            </div>
+            <p>插值多项式为 \(f(t)=a_0+a_1t+a_2t^2\)。拉格朗日插值公式为</p>
+            <div class="formula-box">
+                \[
+                f(t) = y_0 L_0(t) + y_1 L_1(t) + y_2 L_2(t),
+                \]
+            </div>
+            <p>其中 \(L_i(t)=\prod_{j\ne i}\frac{t-t_j}{t_i-t_j}\)。两种方法等价，因为插值多项式唯一，只是基函数选取不同（幂基 vs 拉格朗日基）。</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- 习题 2：纠错码中的线性代数 -->
+<!-- ============================================================ -->
+<section>
+    <h2>习题 2 &nbsp; 信息传输中的线性代数——纠错码</h2>
+    <div class="exercise-block">
+
+        <h3>第 (1) 小题</h3>
+        <div class="answer">
+            <p>给定校验矩阵</p>
+            <div class="formula-box">
+                \[
+                H = \begin{pmatrix}
+                1 & 1 & 1 & 0 & 1 & 0 & 0 \\
+                1 & 1 & 0 & 1 & 0 & 1 & 0 \\
+                1 & 0 & 1 & 1 & 0 & 0 & 1
+                \end{pmatrix}.
+                \]
+            </div>
+            <p>进行模2初等行变换（将第1行加到第2、3行，然后交换行）得阶梯形</p>
+            <div class="formula-box">
+                \[
+                \begin{pmatrix}
+                1 & 1 & 1 & 0 & 1 & 0 & 0 \\
+                0 & 1 & 0 & 1 & 1 & 0 & 1 \\
+                0 & 0 & 1 & 1 & 1 & 1 & 0
+                \end{pmatrix}.
+                \]
+            </div>
+            <p>秩为3，未知量7个，自由未知量个数 \(7-3=4\)。因此合法码字个数为 \(2^4=16\)，即发送方可发送16个不同消息，对应4比特有效信息。</p>
+        </div>
+
+        <h3>第 (2) 小题</h3>
+        <div class="answer">
+            <p>接收向量 \(\mathbf{r} = (0,1,1,0,0,1,0)^T\)。计算伴随式</p>
+            <div class="formula-box">
+                \[
+                \mathbf{s} = H\mathbf{r} = 
+                \begin{pmatrix}
+                0\cdot1 + 1\cdot1 + 1\cdot1 + 0\cdot0 + 0\cdot1 + 1\cdot0 + 0\cdot0 \\
+                0\cdot1 + 1\cdot1 + 1\cdot0 + 0\cdot1 + 0\cdot0 + 1\cdot1 + 0\cdot0 \\
+                0\cdot1 + 1\cdot0 + 1\cdot1 + 0\cdot1 + 0\cdot0 + 1\cdot0 + 0\cdot1
+                \end{pmatrix}
+                =
+                \begin{pmatrix}
+                0 \\ 0 \\ 1
+                \end{pmatrix}
+                \quad (\text{模2}).
+                \]
+            </div>
+            <p>伴随式 \((0,0,1)^T\) 等于 \(H\) 的第7列，因此错误发生在第7位。将接收向量第7位由0翻转为1，得到原始码字</p>
+            <div class="formula-box">
+                \[
+                \mathbf{c} = (0,1,1,0,0,1,1)^T.
+                \]
+            </div>
+        </div>
+
+        <h3>第 (3) 小题 —— 两位错误情况</h3>
+        <div class="answer">
+            <p>发送全零码字 \(\mathbf{c}=(0,\dots,0)^T\)，接收 \(\mathbf{r}=(0,1,1,0,0,0,0)^T\)。</p>
+            <ol>
+                <li><strong>伴随式：</strong>
+                    <div class="formula-box">
+                        \[
+                        \mathbf{s} = H\mathbf{r} = \text{第2列} + \text{第3列}
+                        = \begin{pmatrix}1\\1\\0\end{pmatrix} + \begin{pmatrix}1\\0\\1\end{pmatrix}
+                        = \begin{pmatrix}0\\1\\1\end{pmatrix}.
+                        \]
+                    </div>
+                </li>
+                <li><strong>验证两个解：</strong>
+                    <div class="formula-box">
+                        \[
+                        \mathbf{e}_1 = (0,0,0,1,0,0,0)^T \quad \text{(第4位错)}
+                        \]
+                        \[
+                        H\mathbf{e}_1 = \text{第4列} = \begin{pmatrix}0\\1\\1\end{pmatrix} = \mathbf{s}.
+                        \]
+                        \[
+                        \mathbf{e}_2 = (0,1,1,0,0,0,0)^T \quad \text{(第2、3位错)}
+                        \]
+                        \[
+                        H\mathbf{e}_2 = \text{第2列}+\text{第3列} = \begin{pmatrix}0\\1\\1\end{pmatrix} = \mathbf{s}.
+                        \]
+                    </div>
+                    <p>两者都是 \(H\mathbf{x}=\mathbf{s}\) 的解。</p>
+                </li>
+                <li><strong>解的不唯一性：</strong>
+                    <p>非齐次方程的通解为 \(\mathbf{e}_1 + \ker(H)\)，而 \(\ker(H)\) 即所有合法码字（因为 \(H\mathbf{c}=0\)），共有16个解。因此仅凭伴随式无法区分实际错误是 \(\mathbf{e}_1\)（1位错）还是 \(\mathbf{e}_2\)（2位错）或其它可能。故系统不能纠正两位错误，只能保证纠正一位错误。</p>
+                </li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<footer class="footnote">
+    <hr>
+    <p style="text-align: center; color: #666;">✅ 所有公式均使用 MathJax 渲染，支持响应式显示。</p>
+</footer>
+
+</body>
+</html>
