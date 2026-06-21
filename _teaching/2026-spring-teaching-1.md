@@ -1,7 +1,7 @@
 ---
 title: "2026春季学期：行政职业能力训练（部分）"
 collection: teaching
-category: current
+category: history
 type: "本科生课程"
 permalink: /teaching/2026-spring-teaching-1
 venue: "浦口校区教学楼"
