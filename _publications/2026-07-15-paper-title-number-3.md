@@ -1,5 +1,5 @@
 ---
-title: "Torsion groups of rational elliptic curves over $$\mathbb{Z}_p$$-extensions of quadratic fields: the $$p\le5$$ case"
+title: "Torsion groups of rational elliptic curves over Zp-extensions of quadratic fields: the p<=5 case"
 collection: publications
 category: preprints
 permalink: /publication/2026-07-15-paper-title-number-3
