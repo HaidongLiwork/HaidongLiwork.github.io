@@ -8,8 +8,8 @@
 
 <div class="{{ include.type | default: "list" }}__item">
   <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    <h2 class="archive__item-title" itemprop="headline">
-      <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
-    </h2>
+    <p class="talk-line" itemprop="headline">
+      <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>{% if post.venue %} — {{ post.venue }}{% endif %}{% if post.location %}，{{ post.location }}{% endif %}{% if post.date %} · {{ post.date | date: "%Y-%m-%d" }}{% endif %}
+    </p>
   </article>
 </div>

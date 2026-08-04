@@ -55,3 +55,25 @@
 .page__content .archive__item-title {
   margin-top: 0.6em;
 }
+
+/* Research 页面条目：基本信息 + 一个链接 */
+.research-item {
+  margin-bottom: 1.2em;
+}
+
+.research-title {
+  margin: 0 0 0.2em;
+  font-weight: bold;
+  color: var(--global-text-color);
+}
+
+.research-meta {
+  margin: 0 0 0.15em;
+  font-size: 0.95em;
+  color: #57606a;
+}
+
+/* Talks 一行条目 */
+.talk-line {
+  margin: 0 0 0.5em;
+}

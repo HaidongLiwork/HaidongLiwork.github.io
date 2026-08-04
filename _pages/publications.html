@@ -1,15 +1,14 @@
 ---
 layout: archive
-title: "Publications"
+title: "Research"
 permalink: /publications/
 author_profile: false
 ---
 
 {% include base_path %}
 
-<!-- New style rendering if publication categories are defined -->
 {% if site.publication_category %}
-  {% for category in site.publication_category  %}
+  {% for category in site.publication_category %}
     {% assign title_shown = false %}
     {% for post in site.publications reversed %}
       {% if post.category != category[0] %}
@@ -19,12 +18,18 @@ author_profile: false
         <h2>{{ category[1].title }}</h2>
         {% assign title_shown = true %}
       {% endunless %}
-      {% include archive-single.html %}
+      <div class="list__item research-item">
+        <p class="research-title">{{ post.title }}</p>
+        {% if post.author %}<p class="research-meta">{{ post.author }}</p>{% endif %}
+        <p class="research-meta">
+          {% if post.category == 'journal' %}
+            {{ post.venue }} ({{ post.date | default: "1900-01-01" | date: "%Y" }}){% if post.doi %} · <a href="{{ post.doi }}">DOI</a>{% endif %}
+          {% else %}
+            {{ post.date | default: "1900-01-01" | date: "%Y" }}{% if post.paperurl %} · <a href="{{ post.paperurl }}">arXiv</a>{% endif %}
+          {% endif %}
+        </p>
+      </div>
     {% endfor %}
-  {% endfor %}
-{% else %}
-  {% for post in site.publications reversed %}
-    {% include archive-single.html %}
   {% endfor %}
 {% endif %}
 
