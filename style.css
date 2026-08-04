@@ -4,6 +4,10 @@
   --link: #1a5fb4;
   --muted: #57606a;
   --border: #e5e7eb;
+  --font-serif: Georgia, "Times New Roman", "Songti SC", SimSun, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
 }
 
 * {
@@ -18,7 +22,7 @@ body {
   margin: 0 auto;
   max-width: 760px;
   padding: 2rem 1.5rem 4rem;
-  font-family: Georgia, "Times New Roman", "Songti SC", SimSun, serif;
+  font-family: var(--font-serif);
   color: var(--text);
   background: #fff;
   line-height: 1.7;
@@ -28,23 +32,17 @@ h1 {
   margin: 0 0 0.6rem;
   font-size: 1.9rem;
   line-height: 1.3;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
+  font-family: var(--font-sans);
 }
 
 h2 {
   margin: 2em 0 0.5em;
   font-size: 1.3rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
+  font-family: var(--font-sans);
 }
 
 h3 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
+  font-family: var(--font-sans);
 }
 
 p {
@@ -66,23 +64,13 @@ nav ul {
   padding: 0 0 0.6em;
   list-style: none;
   border-bottom: 1px solid var(--border);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
+  font-family: var(--font-sans);
 }
 
 nav li {
   display: inline-block;
   margin: 0 1.2em 0 0;
   font-weight: bold;
-}
-
-ul {
-  padding-left: 1.3em;
-}
-
-li {
-  margin-bottom: 0.5em;
 }
 
 /* 正文区条目统一使用“·”圆点，首行悬挂缩进 */
@@ -92,6 +80,7 @@ main ul {
 }
 
 main li {
+  margin-bottom: 0.5em;
   padding-left: 1em;
   text-indent: -1em;
 }
