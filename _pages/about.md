@@ -6,6 +6,14 @@ redirect_from:
   - /about.html
 ---
 
+<div class="homepage-hero">
+  <img src="/images/lihaidong4.jpeg" alt="Li Haidong 李海东" class="homepage-photo" />
+  <p class="homepage-name">Li Haidong 李海东</p>
+  <p class="homepage-tagline">数论研究者 · 江苏警官学院教师</p>
+  <p class="homepage-tagline-en">Number theorist at Jiangsu Police Institute</p>
+  <p class="homepage-contact"><a href="mailto:lihaidong@jspi.cn">lihaidong@jspi.cn</a> · <a href="https://orcid.org/0009-0008-6381-2600">ORCID</a></p>
+</div>
+
   如您所见，此为本人个人主页，主要用来存放学术和教学资源。
 
   我目前是江苏警官学院一名教职工，主要的工作是给本科生教授基础的数学课程。我会将部分公开教学资源（如讲义、作业等）上传至**Teaching**模块，供各位学生采用、各位同行参考。
