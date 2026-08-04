@@ -9,8 +9,8 @@
 # Basic Site Settings
 locale                   : "zh_CN"
 site_theme               : "default" # Currently available options are "default", "air"
-title                    : "您好"
-title_separator          : "（李海东个人主页）" 
+title                    : "李海东 Li Haidong"
+title_separator          : " | "
 name                     : &name "Li Haidong（李海东）"
 description              : &description "Li Haidong Personal Page"   # Update this with a general description of your site, this is the default if not overridden by a page
 url                      : https://haidongliwork.github.io # The base hostname & protocol for your site e.g. "https://[your GitHub username].github.io",
@@ -254,7 +254,7 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       read_time: true
       comments: true
       share: false
@@ -265,7 +265,7 @@ defaults:
       type: pages
     values:
       layout: single
-      author_profile: true
+      author_profile: false
   # _teaching
   - scope:
       path: ""
@@ -290,7 +290,7 @@ defaults:
       type: portfolio
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       share: true
       comment: true
   # _talks
