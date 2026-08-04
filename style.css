@@ -18,9 +18,7 @@ body {
   margin: 0 auto;
   max-width: 760px;
   padding: 2rem 1.5rem 4rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
+  font-family: Georgia, "Times New Roman", "Songti SC", SimSun, serif;
   color: var(--text);
   background: #fff;
   line-height: 1.7;
@@ -30,11 +28,23 @@ h1 {
   margin: 0 0 0.6rem;
   font-size: 1.9rem;
   line-height: 1.3;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
 }
 
 h2 {
   margin: 2em 0 0.5em;
   font-size: 1.3rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+h3 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
 }
 
 p {
@@ -55,6 +65,9 @@ nav ul {
   padding: 0 0 0.6em;
   list-style: none;
   border-bottom: 1px solid var(--border);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
 }
 
 nav li {
@@ -69,6 +82,28 @@ ul {
 
 li {
   margin-bottom: 0.5em;
+}
+
+/* 正文区条目统一使用“·”圆点，首行悬挂缩进 */
+main ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+main li {
+  padding-left: 1em;
+  text-indent: -1em;
+}
+
+main li::before {
+  content: "· ";
+  color: var(--muted);
+}
+
+/* arXiv 编号：等宽小号字体 */
+.arxiv {
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  font-size: 0.9em;
 }
 
 hr {
