@@ -1,17 +1,19 @@
 ---
 title: "On the Mordell-Weil rank of certain CM abelian varieties over anticyclotomic towers"
 collection: publications
-category: preprints
+category: journal
 permalink: /publication/2025-02-18-paper-title-number-1
 excerpt: ''
-type: Put
-date: 2025-02-18
-venue: 'arXiv'
+date: 2027-01-01
+venue: 'Journal of Number Theory'
+doi: 'https://doi.org/10.1016/j.jnt.2026.06.001'
 paperurl: 'https://arxiv.org/pdf/2502.12648'
 author: 'Li Haidong, Xu Ruichen'
 ---
 
 This is a joint work with Xu Ruichen（徐睿晨）.
+
+Published in *Journal of Number Theory* 293 (2027), 1–41. DOI: [10.1016/j.jnt.2026.06.001](https://doi.org/10.1016/j.jnt.2026.06.001). Preprint: [arXiv:2502.12648](https://arxiv.org/pdf/2502.12648).
 
 # Abstract
 

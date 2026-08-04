@@ -7,10 +7,9 @@ redirect_from:
 ---
 
 <div class="homepage-hero">
-  <img src="/images/lihaidong4.jpeg" alt="Li Haidong 李海东" class="homepage-photo" />
   <p class="homepage-name">Li Haidong 李海东</p>
-  <p class="homepage-tagline">数论研究者 · 江苏警官学院教师</p>
-  <p class="homepage-tagline-en">Number theorist at Jiangsu Police Institute</p>
+  <p class="homepage-tagline">江苏警官学院教师</p>
+  <p class="homepage-tagline-en">Faculty member at Jiangsu Police Institute</p>
   <p class="homepage-contact"><a href="mailto:lihaidong@jspi.cn">lihaidong@jspi.cn</a> · <a href="https://orcid.org/0009-0008-6381-2600">ORCID</a></p>
 </div>
 
