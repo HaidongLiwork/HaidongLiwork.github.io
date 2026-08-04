@@ -1,7 +1,7 @@
 /* 极简学术风：白底、黑字、蓝链接 */
 :root {
   --text: #1f2328;
-  --link: #0969da;
+  --link: #1a5fb4;
   --muted: #57606a;
   --border: #e5e7eb;
 }
@@ -57,6 +57,7 @@ a {
 }
 
 a:hover {
+  color: #0d4d9e;
   text-decoration: underline;
 }
 
@@ -96,7 +97,11 @@ main li {
 }
 
 main li::before {
-  content: "· ";
+  content: "·";
+  font-size: 1.35em;
+  line-height: 1;
+  margin-right: 0.3em;
+  vertical-align: -0.05em;
   color: var(--muted);
 }
 
@@ -116,6 +121,37 @@ hr {
   color: var(--muted);
 }
 
+/* 当前页面在菜单中高亮 */
+nav li.active a {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+/* 页脚 */
+footer {
+  margin-top: 3em;
+  padding-top: 0.8em;
+  border-top: 1px solid var(--border);
+  font-size: 0.85em;
+}
+
+/* 打印时只保留干净文字 */
+@media print {
+  nav {
+    display: none;
+  }
+
+  body {
+    max-width: none;
+    padding: 1em;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
+}
+
 @media (max-width: 480px) {
   html {
     font-size: 16px;
@@ -123,5 +159,13 @@ hr {
 
   body {
     padding: 1.2rem 1rem 3rem;
+  }
+
+  h1 {
+    font-size: 1.7rem;
+  }
+
+  nav li {
+    margin-right: 0.8em;
   }
 }
