@@ -94,6 +94,23 @@ main li::before {
   color: var(--muted);
 }
 
+/* 课程资源：保持极简风格，同时让较长的链接更易浏览 */
+.resource-list {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.resource-list li {
+  margin-bottom: 0;
+  padding: 0.45rem 0.75rem 0.45rem 1.75rem;
+  border-left: 2px solid var(--border);
+  background: #f8fafc;
+}
+
+.resource-list a {
+  font-weight: 600;
+}
+
 /* arXiv 编号：等宽小号字体 */
 .arxiv {
   font-family: Consolas, Monaco, "Courier New", monospace;
