@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>z = 5cos(x) - cos(5x+φ) 带截面高亮</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; }
+        #plot { width: 100%; height: 85vh; }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            z-index: 100;
+            font-size: 16px;
+        }
+        .controls label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .controls select, .controls input {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+            font-size: 16px;
+        }
+        .controls input[type="range"] {
+            width: 220px;
+        }
+        .value-display {
+            min-width: 70px;
+            font-weight: bold;
+            color: #d62728;
+        }
+        .note {
+            font-size: 14px;
+            color: #555;
+            margin-left: 10px;
+        }
+        @media (max-width: 700px) {
+            .controls { flex-direction: column; align-items: stretch; width: 90%; left: 5%; bottom: 10px; }
+            .controls input[type="range"] { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div id="plot"></div>
+
+    <div class="controls">
+        <div>
+            <label for="typeSelect">高亮类型：</label>
+            <select id="typeSelect">
+                <option value="phi">固定 φ</option>
+                <option value="x">固定 x</option>
+            </select>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label for="valueSlider">数值：</label>
+            <input type="range" id="valueSlider" min="-6.2832" max="6.2832" step="0.01" value="0">
+            <span class="value-display" id="valueDisplay">0.00</span>
+        </div>
+        <span class="note">（红色曲线为当前截面）</span>
+    </div>
+
+    <script>
+        // ---------- 参数设置 ----------
+        const n = 80;
+        const xMin = -2 * Math.PI, xMax = 2 * Math.PI;
+        const phiMin = -2 * Math.PI, phiMax = 2 * Math.PI;
+
+        // 生成坐标轴数据
+        const xVals = Array.from({ length: n + 1 }, (_, i) => xMin + (xMax - xMin) * i / n);
+        const phiVals = Array.from({ length: n + 1 }, (_, j) => phiMin + (phiMax - phiMin) * j / n);
+
+        // 计算曲面 z 值 (行=phi, 列=x)
+        const zData = phiVals.map(phi => 
+            xVals.map(x => 5 * Math.cos(x) - Math.cos(5 * x + phi))
+        );
+
+        // 刻度标签
+        const piTickVals = [-2*Math.PI, -Math.PI, 0, Math.PI, 2*Math.PI];
+        const piTickTexts = ['-2π', '-π', '0', 'π', '2π'];
+
+        // 曲面 trace
+        function getSurfaceTrace() {
+            return {
+                type: 'surface',
+                x: xVals,
+                y: phiVals,
+                z: zData,
+                colorscale: 'Viridis',
+                showscale: true,
+                opacity: 0.85,
+                name: '曲面'
+            };
+        }
+
+        // 布局（固定）
+        const layout = {
+            title: {
+                text: 'z = 5cos(x) − cos(5x + φ) （可拖动滑块高亮截面）',
+                font: { size: 22 }
+            },
+            scene: {
+                xaxis: { 
+                    title: 'x', 
+                    gridcolor: 'lightgray',
+                    tickvals: piTickVals,
+                    ticktext: piTickTexts,
+                    range: [xMin, xMax]
+                },
+                yaxis: { 
+                    title: 'φ', 
+                    gridcolor: 'lightgray',
+                    tickvals: piTickVals,
+                    ticktext: piTickTexts,
+                    range: [phiMin, phiMax]
+                },
+                zaxis: { 
+                    title: 'z', 
+                    gridcolor: 'lightgray',
+                    range: [-6, 6]
+                },
+                aspectratio: { x: 2.5, y: 2.5, z: 0.6 },
+                camera: {
+                    eye: { x: 2.8, y: 2.2, z: 1.8 }
+                }
+            },
+            margin: { l: 0, r: 0, b: 0, t: 50 }
+        };
+
+        // ---------- 高亮曲线生成 ----------
+        function getHighlightTrace(type, value) {
+            if (type === 'phi') {
+                // 固定 φ = value，曲线为 z(x) = 5cos(x) - cos(5x + value)
+                const xCurve = xVals;
+                const zCurve = xVals.map(x => 5 * Math.cos(x) - Math.cos(5 * x + value));
+                // 所有点的 φ 坐标都为 value
+                const phiCurve = xVals.map(() => value);
+                return {
+                    type: 'scatter3d',
+                    mode: 'lines',
+                    x: xCurve,
+                    y: phiCurve,
+                    z: zCurve,
+                    line: { color: 'red', width: 6 },
+                    name: `φ = ${value.toFixed(2)}`
+                };
+            } else { // 固定 x = value
+                // 固定 x = value，曲线为 z(φ) = 5cos(value) - cos(5*value + φ)
+                const phiCurve = phiVals;
+                const zCurve = phiVals.map(phi => 5 * Math.cos(value) - Math.cos(5 * value + phi));
+                const xCurve = phiVals.map(() => value);
+                return {
+                    type: 'scatter3d',
+                    mode: 'lines',
+                    x: xCurve,
+                    y: phiCurve,
+                    z: zCurve,
+                    line: { color: 'red', width: 6 },
+                    name: `x = ${value.toFixed(2)}`
+                };
+            }
+        }
+
+        // ---------- 渲染函数 ----------
+        function render(type, value) {
+            const surfaceTrace = getSurfaceTrace();
+            const highlightTrace = getHighlightTrace(type, value);
+            const traces = [surfaceTrace, highlightTrace];
+            Plotly.react('plot', traces, layout);
+        }
+
+        // ---------- 绑定控件 ----------
+        const typeSelect = document.getElementById('typeSelect');
+        const valueSlider = document.getElementById('valueSlider');
+        const valueDisplay = document.getElementById('valueDisplay');
+
+        function updateFromControls() {
+            const type = typeSelect.value;
+            const value = parseFloat(valueSlider.value);
+            valueDisplay.textContent = value.toFixed(2);
+            render(type, value);
+        }
+
+        typeSelect.addEventListener('change', updateFromControls);
+        valueSlider.addEventListener('input', updateFromControls);
+
+        // 初始渲染 (默认固定φ=0)
+        render('phi', 0);
+        valueSlider.value = 0;
+        valueDisplay.textContent = '0.00';
+    </script>
+</body>
+</html>

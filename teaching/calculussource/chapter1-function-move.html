@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>含参函数 f(x) = x² − 4ax + 4a² + 2</title>
+<style>
+  :root{
+    --ink:#1e293b;
+    --muted:#64748b;
+    --accent:#2563eb;
+    --red:#ef4444;
+    --line:#e6edf6;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: radial-gradient(circle at 20% 0%, #f9fcff, #e6edf6 65%);
+    color: var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .app{
+    width:100%;
+    max-width:1180px;
+    height:min(760px, calc(100vh - 40px));
+    display:flex;
+    gap:18px;
+    background:#fff;
+    border-radius:20px;
+    padding:18px;
+    box-shadow: 0 22px 60px -22px rgba(15,23,42,.4), 0 0 0 1px rgba(15,23,42,.05);
+    overflow:hidden;
+  }
+  .stage{
+    position:relative;
+    flex:1;
+    min-width:0;
+    border-radius:14px;
+    background:linear-gradient(#ffffff,#fbfdff);
+    box-shadow: inset 0 0 0 1px var(--line);
+    overflow:hidden;
+  }
+  canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+  .panel{
+    width:340px;
+    flex:0 0 340px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    padding:4px;
+    overflow-y:auto;
+  }
+  h1{
+    margin:0 0 4px;
+    font-size:20px;
+    letter-spacing:.5px;
+  }
+  .sub{
+    margin:0;
+    font-size:13px;
+    line-height:1.6;
+    color:var(--muted);
+  }
+  .sub i{ color:var(--accent); font-weight:700; font-style:italic; }
+
+  .card{
+    background:linear-gradient(135deg,#f2f7ff,#eaf1ff);
+    border:1px solid #dbe7fb;
+    border-radius:12px;
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .card .tag{
+    font-size:11px;
+    letter-spacing:2px;
+    color:#7c8ba1;
+    text-transform:uppercase;
+  }
+  .eq{
+    font-family: "Cambria Math", "Times New Roman", Georgia, serif;
+    font-size:17px;
+    letter-spacing:.3px;
+  }
+  .eq.main{ color:#1d4ed8; font-weight:700; font-size:18px; }
+  .eq.num{ font-size:14px; color:#475569; }
+  .eq.num b{ color:#ef4444; }
+
+  .ctrl{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px 14px 8px;
+  }
+  .row{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:6px;
+  }
+  .row .k{
+    font-family:"Times New Roman", Georgia, serif;
+    font-style:italic;
+    font-size:20px;
+    color:var(--accent);
+    font-weight:700;
+  }
+  .row .v{
+    font-size:20px;
+    font-weight:700;
+    color:var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .row.small{
+    font-size:11px;
+    color:#9aa8ba;
+    margin:2px 0 0;
+  }
+  input[type=range]{
+    width:100%;
+    height:24px;
+    accent-color: var(--accent);
+    cursor:pointer;
+  }
+
+  .stats{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .stats > div{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#f8fafc;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:9px 13px;
+    font-size:14px;
+  }
+  .stats span{ color:var(--muted); }
+  .stats b{
+    color:var(--red);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .btn{
+    appearance:none;
+    border:none;
+    border-radius:11px;
+    padding:12px;
+    font-size:15px;
+    font-weight:600;
+    font-family:inherit;
+    color:#fff;
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    box-shadow:0 8px 18px -8px rgba(37,99,235,.9);
+    cursor:pointer;
+    transition: transform .12s ease, box-shadow .2s ease, filter .2s ease;
+  }
+  .btn:hover{ filter:brightness(1.06); }
+  .btn:active{ transform: translateY(1px); }
+
+  .note{
+    margin:0;
+    font-size:12.5px;
+    line-height:1.9;
+    color:var(--muted);
+    background:#fbfdff;
+    border-left:3px solid #c7dbfb;
+    border-radius:0 8px 8px 0;
+    padding:10px 12px;
+  }
+  .note b{ color:var(--accent); }
+
+  @media (max-width: 880px){
+    body{ padding:0; }
+    .app{
+      flex-direction:column;
+      height:100vh;
+      max-width:none;
+      border-radius:0;
+      padding:10px;
+      gap:12px;
+    }
+    .stage{ flex:1 1 auto; min-height:0; }
+    .panel{
+      width:auto;
+      flex:0 0 auto;
+      max-height:46vh;
+      padding:2px;
+    }
+    h1{ font-size:17px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="stage">
+    <canvas id="c"></canvas>
+  </div>
+
+  <aside class="panel">
+    <header>
+      <h1>含参函数</h1>
+      <p class="sub">拖动滑块改变参数 <i>a</i>，观察图象如何随 <i>a</i> 变化</p>
+    </header>
+
+    <div class="card">
+      <div class="tag">原始式</div>
+      <div class="eq main">f(x) = x² − 4ax + 4a² + 2</div>
+      <div class="tag" style="margin-top:4px;">当前取值</div>
+      <div class="eq num" id="eqNum">—</div>
+    </div>
+
+    <div class="ctrl">
+      <div class="row">
+        <span class="k">a</span>
+        <span class="v" id="aval">1</span>
+      </div>
+      <input type="range" id="slider" min="-3" max="3" step="0.01" value="1">
+      <div class="row small"><span>−3</span><span>0</span><span>3</span></div>
+    </div>
+
+    <div class="stats">
+      <div><span>顶点坐标</span><b id="vertex">—</b></div>
+      <div><span>对称轴</span><b id="axis">—</b></div>
+    </div>
+
+    <button class="btn" id="playBtn">▶ 自动演示</button>
+
+    <p class="note">
+      把 <b>a</b> 当作一个旋钮：每拧一下，整条抛物线就沿着 <b>x</b> 轴滑动一段。
+      试着自己找出顶点移动的规律——答案就藏在式子的某个系数里。
+    </p>
+  </aside>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const stage    = document.querySelector('.stage');
+  const canvas   = document.getElementById('c');
+  const ctx      = canvas.getContext('2d');
+  const slider   = document.getElementById('slider');
+  const aval     = document.getElementById('aval');
+  const eqNum    = document.getElementById('eqNum');
+  const vertexEl = document.getElementById('vertex');
+  const axisEl   = document.getElementById('axis');
+  const playBtn  = document.getElementById('playBtn');
+
+  /* ---------------- 状态 ---------------- */
+  let a = 1;                 // 参数
+  let W = 1, H = 1;          // CSS 像素尺寸
+  let Sx = 40, Sy = 40;      // x / y 方向缩放（像素每单位）
+  const CY = 5.5;            // 视野中心的世界 y 坐标
+  const SPAN_X = 22;         // 视野宽度（世界单位）
+  const SPAN_Y = 15;         // 视野高度（世界单位）
+
+  const SX = x => W / 2 + x * Sx;
+  const SY = y => H / 2 - (y - CY) * Sy;
+
+  /* ---------------- 工具 ---------------- */
+  function fmt(v, d) {
+    d = d === undefined ? 2 : d;
+    if (Math.abs(v) < 1e-9) return '0';
+    let s = v.toFixed(d);
+    if (s.indexOf('.') >= 0) s = s.replace(/0+$/, '').replace(/\.$/, '');
+    return s;
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  /* ---------------- 尺寸 ---------------- */
+  function resize() {
+    const rect = stage.getBoundingClientRect();
+    const dpr  = Math.min(window.devicePixelRatio || 1, 2);
+    W = Math.max(200, rect.width);
+    H = Math.max(160, rect.height);
+
+    canvas.width  = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    Sx = W / SPAN_X;
+    Sy = H / SPAN_Y;
+
+    render();
+  }
+
+  /* ---------------- 绘制 ---------------- */
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    const xL = -SPAN_X / 2, xR = SPAN_X / 2;
+    const yB = CY - SPAN_Y / 2, yT = CY + SPAN_Y / 2;
+
+    const xAxisY = SY(0);   // y = 0 在屏幕上的纵坐标
+    const yAxisX = SX(0);   // x = 0 在屏幕上的横坐标
+
+    /* --- 网格 --- */
+    const gstep = Sx >= 30 ? 1 : (Sx >= 15 ? 2 : 5);
+    ctx.strokeStyle = '#eaf0f8';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let x = Math.ceil(xL / gstep) * gstep; x <= xR + 1e-9; x += gstep) {
+      const px = Math.round(SX(x)) + 0.5;
+      ctx.moveTo(px, 0); ctx.lineTo(px, H);
+    }
+    for (let y = Math.ceil(yB / gstep) * gstep; y <= yT + 1e-9; y += gstep) {
+      const py = Math.round(SY(y)) + 0.5;
+      ctx.moveTo(0, py); ctx.lineTo(W, py);
+    }
+    ctx.stroke();
+
+    /* --- 顶点轨迹 y = 2（虚线） --- */
+    const trackY = SY(2);
+    if (trackY > -20 && trackY < H + 20) {
+      ctx.save();
+      ctx.setLineDash([8, 7]);
+      ctx.strokeStyle = 'rgba(239,68,68,0.32)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, trackY);
+      ctx.lineTo(W, trackY);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.font = '600 11.5px system-ui, sans-serif';
+      ctx.fillStyle = 'rgba(239,68,68,0.7)';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('顶点轨迹 y = 2', W - 10, trackY - 5);
+    }
+
+    /* --- 坐标轴 --- */
+    ctx.strokeStyle = '#9aa8ba';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(0, xAxisY); ctx.lineTo(W - 2, xAxisY);
+    ctx.moveTo(yAxisX, H);  ctx.lineTo(yAxisX, 2);
+    ctx.stroke();
+
+    ctx.fillStyle = '#9aa8ba';
+    ctx.beginPath();          // x 轴箭头
+    ctx.moveTo(W, xAxisY);
+    ctx.lineTo(W - 11, xAxisY - 5.5);
+    ctx.lineTo(W - 11, xAxisY + 5.5);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();          // y 轴箭头
+    ctx.moveTo(yAxisX, 0);
+    ctx.lineTo(yAxisX - 5.5, 11);
+    ctx.lineTo(yAxisX + 5.5, 11);
+    ctx.closePath(); ctx.fill();
+
+    /* --- 刻度 --- */
+    const tickStep = Math.max(1, Math.round(38 / Sx));
+    ctx.font = '12px system-ui, -apple-system, sans-serif';
+    ctx.fillStyle = '#9aa8ba';
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    for (let x = Math.ceil(xL / tickStep) * tickStep; x <= xR + 1e-9; x += tickStep) {
+      if (Math.abs(x) < 1e-9) continue;
+      const px = SX(x);
+      ctx.strokeStyle = '#9aa8ba';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(px, xAxisY - 4); ctx.lineTo(px, xAxisY + 4);
+      ctx.stroke();
+      ctx.fillText(String(Math.round(x)), px, xAxisY + 7);
+    }
+
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    for (let y = Math.ceil(yB / tickStep) * tickStep; y <= yT + 1e-9; y += tickStep) {
+      if (Math.abs(y) < 1e-9) continue;
+      const py = SY(y);
+      ctx.strokeStyle = '#9aa8ba';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(yAxisX - 4, py); ctx.lineTo(yAxisX + 4, py);
+      ctx.stroke();
+      ctx.fillText(String(Math.round(y)), yAxisX - 8, py);
+    }
+
+    // 原点 O
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillText('O', yAxisX - 5, xAxisY + 6);
+
+    // 轴名
+    ctx.font = 'italic 16px "Times New Roman", Georgia, serif';
+    ctx.fillStyle = '#7c8ba1';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillText('x', W - 8, xAxisY + 10);
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText('y', yAxisX + 9, 18);
+
+    /* --- 抛物线（按 y = x² − 4ax + 4a² + 2 计算，即顶点式展开） --- */
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = 3.4;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#2563eb';
+    ctx.shadowColor = 'rgba(37,99,235,0.28)';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetY = 3;
+
+    let pen = false;
+    for (let px = 0; px <= W; px += 1) {
+      const x = (px - W / 2) / Sx;
+      // 直接代入展开式计算，保持“神秘感”
+      const y = x * x - 4 * a * x + 4 * a * a + 2;
+      const py = SY(y);
+      if (py < -300 || py > H + 300) { pen = false; continue; }
+      if (!pen) { ctx.moveTo(px, py); pen = true; }
+      else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    /* --- 顶点相关 --- */
+    // 顶点坐标用展开式的系数公式：x_v = -(-4a)/(2*1) = 2a
+    const vx = 2 * a;
+    const vy = 2;                     // 代入可得纵坐标恒为 2
+    const vpx = SX(vx);
+    const vpy = SY(vy);
+
+    // 对称轴（虚线）
+    ctx.save();
+    ctx.setLineDash([5, 5]);
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(239,68,68,0.55)';
+    ctx.beginPath();
+    ctx.moveTo(vpx, vpy);
+    ctx.lineTo(vpx, xAxisY);
+    ctx.stroke();
+    ctx.restore();
+
+    // 对称轴与 x 轴交点的小刻度
+    ctx.beginPath();
+    ctx.arc(vpx, xAxisY, 3, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(239,68,68,0.6)';
+    ctx.fill();
+
+    /* --- 顶点圆点 --- */
+    ctx.beginPath();
+    ctx.arc(vpx, vpy, 7, 0, Math.PI * 2);
+    ctx.fillStyle = '#ef4444';
+    ctx.fill();
+    ctx.lineWidth = 2.6;
+    ctx.strokeStyle = '#ffffff';
+    ctx.stroke();
+
+    // 顶点标签
+    const label = '(' + fmt(vx) + ', 2)';
+    ctx.font = '700 13px system-ui, -apple-system, "PingFang SC", sans-serif';
+    const tw = ctx.measureText(label).width;
+    const bh = 24, bw = tw + 16;
+
+    let bx = vpx + 14;
+    if (bx + bw > W - 8) bx = vpx - 14 - bw;
+    if (bx < 8) bx = 8;
+
+    let by = vpy - 38;
+    if (by < 8) by = vpy + 16;
+
+    roundRect(bx, by, bw, bh, 7);
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(239,68,68,0.35)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.fillStyle = '#dc2626';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, bx + 8, by + bh / 2 + 0.5);
+
+    // 从顶点引出的细线指向标签
+    ctx.beginPath();
+    ctx.moveTo(vpx, vpy - 8);
+    ctx.lineTo(bx + bw / 2, by + bh);
+    ctx.strokeStyle = 'rgba(239,68,68,0.35)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  /* ---------------- 面板更新（只展示展开式） ---------------- */
+  function updateUI() {
+    aval.textContent = fmt(a, 2);
+
+    const b = -4 * a;          // 一次项系数
+    const c = 4 * a * a + 2;   // 常数项
+
+    let poly = 'x²';
+    if (Math.abs(b) > 1e-9) {
+      poly += (b > 0 ? ' + ' : ' − ') + fmt(Math.abs(b)) + 'x';
+    }
+    poly += ' + ' + fmt(c);
+
+    // 用高亮标出随 a 变化的系数
+    eqNum.innerHTML = 'f(x) = ' + poly;
+
+    // 顶点、对称轴由系数公式给出，不做配方说明
+    vertexEl.textContent = '(' + fmt(2 * a) + ', 2)';
+    axisEl.textContent = 'x = ' + fmt(2 * a);
+  }
+
+  function render() {
+    updateUI();
+    draw();
+  }
+
+  /* ---------------- 交互 ---------------- */
+  slider.addEventListener('input', function (e) {
+    stopAnim();
+    a = parseFloat(e.target.value);
+    render();
+  });
+
+  // 画布上左右拖动也能改变 a
+  let dragging = false;
+  canvas.addEventListener('pointerdown', function (e) {
+    dragging = true;
+    stopAnim();
+    canvas.setPointerCapture(e.pointerId);
+    setAFromPointer(e);
+  });
+  canvas.addEventListener('pointermove', function (e) {
+    if (dragging) setAFromPointer(e);
+  });
+  canvas.addEventListener('pointerup', function () { dragging = false; });
+  canvas.addEventListener('pointercancel', function () { dragging = false; });
+
+  function setAFromPointer(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left - W / 2) / Sx;   // 世界坐标 x
+    a = Math.max(-3, Math.min(3, x / 2));
+    slider.value = a;
+    render();
+  }
+
+  /* ---------------- 自动演示 ---------------- */
+  let animId = null, animStart = 0;
+
+  function toggleAnim() {
+    if (animId) { stopAnim(); return; }
+    animStart = performance.now();
+    playBtn.textContent = '⏸ 暂停演示';
+    const tick = function (now) {
+      const t = (now - animStart) / 1000;
+      a = 3 * Math.sin(t * 1.05);
+      slider.value = a;
+      render();
+      animId = requestAnimationFrame(tick);
+    };
+    animId = requestAnimationFrame(tick);
+  }
+
+  function stopAnim() {
+    if (animId) cancelAnimationFrame(animId);
+    animId = null;
+    playBtn.textContent = '▶ 自动演示';
+  }
+
+  playBtn.addEventListener('click', toggleAnim);
+
+  /* ---------------- 启动 ---------------- */
+  if (window.ResizeObserver) {
+    new ResizeObserver(resize).observe(stage);
+  } else {
+    window.addEventListener('resize', resize);
+  }
+  resize();
+  render();
+})();
+</script>
+</body>
+</html>
