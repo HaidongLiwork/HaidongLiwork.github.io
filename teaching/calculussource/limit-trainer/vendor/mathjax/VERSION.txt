@@ -1,0 +1,4 @@
+MathJax 3.2.2 (tex-svg-full.js)
+Source: https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg-full.js
+License: Apache License 2.0 (see LICENSE in this directory)
+Vendored for offline use; no runtime CDN requests.

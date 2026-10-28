@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="高等数学（I）极限方法训练器：先判断结构、选择方法，再查看错因与完整解法。完全离线。">
+  <title>极限方法训练器 · 高等数学（I）</title>
+  <link rel="stylesheet" href="assets/app.css">
+  <script>
+    window.MathJax = {
+      startup: { typeset: false },
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global', scale: 1.0 },
+      options: {
+        enableMenu: false,
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="vendor/mathjax/tex-svg-full.js"></script>
+  <script defer src="data/methods.js"></script>
+  <script defer src="data/problems.js"></script>
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <button class="brand" type="button" data-view="practice" aria-label="回到练习">
+        <span class="brand-mark" aria-hidden="true">lim</span>
+        <span class="brand-text">
+          <strong>极限方法训练器</strong>
+          <span>高等数学（I）· 先看结构，再选方法</span>
+        </span>
+      </button>
+
+      <nav class="view-tabs" aria-label="主导航">
+        <button id="tab-practice" class="view-tab is-active" type="button" aria-current="page" data-view="practice">练习</button>
+        <button id="tab-methods" class="view-tab" type="button" data-view="methods">方法手册</button>
+        <button id="tab-stats" class="view-tab" type="button" data-view="stats">学习记录</button>
+      </nav>
+
+      <div class="header-progress" aria-label="题库练习进度">
+        <span id="progress-label">已练 0 / 60</span>
+        <span class="progress-rail" aria-hidden="true"><span id="progress-fill" class="progress-fill"></span></span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div id="math-warning" class="math-warning" hidden role="status">
+      公式渲染组件未能加载。题目文字和 LaTeX 源码仍可阅读，请检查 <code>vendor/mathjax/</code> 文件是否完整。
+    </div>
+
+    <section id="view-practice" class="view-panel" aria-labelledby="tab-practice">
+      <div class="loading-card">正在准备题目……</div>
+    </section>
+
+    <section id="view-methods" class="view-panel" hidden aria-labelledby="tab-methods"></section>
+    <section id="view-stats" class="view-panel" hidden aria-labelledby="tab-stats"></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>依据《高等数学（I）》2026-10-27 讲义与重点难点文档编写，覆盖到连续函数的代值法。</p>
+      <p>不包含洛必达法则、泰勒展开、导数与积分。离线使用，进度只保存在本机浏览器。</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <noscript>
+    <div class="noscript">这个训练器需要启用 JavaScript 才能运行。</div>
+  </noscript>
+</body>
+</html>
